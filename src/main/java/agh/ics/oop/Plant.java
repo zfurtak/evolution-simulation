@@ -1,8 +1,8 @@
 package agh.ics.oop;
 
-public class Tree extends AbstractWorldMapElement{
+public class Plant extends AbstractWorldMapElement{
 
-    public Tree(Vector2d pos){
+    public Plant(Vector2d pos){
         this.position = pos;
     }
 

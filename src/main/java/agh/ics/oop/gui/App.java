@@ -30,9 +30,9 @@ public class App extends Application implements IPositionChangeObserver{
     public void init() throws Exception {
         super.init();
         try {
-            this.map = new TreeMap(10);
+            this.map = new PlantMap(10);
             Vector2d[] positions = {new Vector2d(1, 1), new Vector2d(2, 2)};
-            engine = new SimulationEngine(map, positions, 900);
+            engine = new SimulationEngine(map, 3, 900);
 
         } catch (IllegalArgumentException exception) {
             exception.printStackTrace();

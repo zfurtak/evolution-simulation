@@ -5,6 +5,9 @@ import java.util.LinkedHashMap;
 
 public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
     protected LinkedHashMap<Vector2d, AbstractWorldMapElement> natures = new LinkedHashMap<>();
+    protected int height;
+    protected int width;
+    protected int jungleRatio;
 
 
     public String toString() {

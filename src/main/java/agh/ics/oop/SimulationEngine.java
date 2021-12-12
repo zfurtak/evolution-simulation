@@ -8,12 +8,12 @@ public class SimulationEngine implements IEngine, Runnable{
     private final AbstractWorldMap map;
     private final int moveDelay;
 
-    public SimulationEngine(AbstractWorldMap map, Vector2d[] animalPositions, int moveDelay){
+    public SimulationEngine(AbstractWorldMap map, int animalQuantity, int moveDelay){
         this.animals = new ArrayList<>();
         this.map = map;
         this.moveDelay = moveDelay;
-        for (Vector2d position : animalPositions){
-            Animal animal = new Animal(map, position);
+        for (int i = 0; i < animalQuantity; i++){
+            Animal animal = new Animal(map);
             this.animals.add(animal);
             map.place(animal);
         }
