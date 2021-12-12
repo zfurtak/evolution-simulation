@@ -7,6 +7,7 @@ public class Animal extends AbstractWorldMapElement{
     private Genome genome;
 
 
+
     public Animal(AbstractWorldMap map) {
         this.position = new Vector2d((int) (Math.random() * 10), (int) (Math.random() * 10));
         //this.position = new Vectord2d((int) (Math.random() * map.width), (int) (Math.random() * map.height));
@@ -42,6 +43,9 @@ public class Animal extends AbstractWorldMapElement{
         }
     }
 
+    public void yummy(){
+        this.energy = this.energy + plantEnergy;
+    }
 
     private void turn(int x) {
         for(int i = 0; i < x; i++) {

@@ -10,6 +10,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     protected int jungleRatio;
 
 
+
     public String toString() {
         MapVisualizer mapVisualizer = new MapVisualizer(this);
         return mapVisualizer.draw(findingLowerCorner(), findingUpperCorner());

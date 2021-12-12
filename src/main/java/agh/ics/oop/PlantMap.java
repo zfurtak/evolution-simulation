@@ -42,6 +42,17 @@ public class PlantMap extends AbstractWorldMap {
         }
     }
 
+    public void positionChanged(Vector2d oldPos, Vector2d newPos) {
+        AbstractWorldMapElement jim = this.natures.get(oldPos);
+        AbstractWorldMapElement element = this.natures.get(newPos);
+        super.positionChanged(oldPos, newPos);
+        if(element instanceof Plant){
+            jim.yummy();
+        }
+        this.natures.remove(oldPos);
+        this.natures.put(newPos, jim);
+    }
+
     @Override
     public Vector2d findingUpperCorner() {
         return rightUpCorner;

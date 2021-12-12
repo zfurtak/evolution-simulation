@@ -6,6 +6,7 @@ import java.util.List;
 public abstract class AbstractWorldMapElement implements IMapElement{
     protected  Vector2d position;
     protected List<IPositionChangeObserver> observers = new ArrayList<>();
+    protected int plantEnergy;
 
 
     public boolean isAt(Vector2d pos) {
@@ -14,10 +15,14 @@ public abstract class AbstractWorldMapElement implements IMapElement{
 
     abstract public String getPath();
 
+    abstract public void yummy();
+
     @Override
     public Vector2d getPosition() {
         return this.position;
     }
+
+
 
     public void addObserver(IPositionChangeObserver observer){
         observers.add(observer);
