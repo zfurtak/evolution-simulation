@@ -26,16 +26,4 @@ public class World {
         }
             return kierunki;
     }
-        public static void run (MoveDirection[] kierunki){
-            for (MoveDirection arg : kierunki) {
-                switch (arg) {
-                    case FORWARD -> out.println("Do przodu");
-                    case RIGHT -> out.println("Na prawo");
-                    case LEFT -> out.println("Na lewo");
-                    case BACKWARD -> out.println("Do tyłu");
-                }
-            }
-
-        }
-
     }

@@ -30,7 +30,7 @@ public class SimulationEngine implements IEngine, Runnable{
         for (int i = 0; i < movesLength; i++){
             int animalID = i % animalsSize;
             Animal animal = this.animals.get(animalID);
-            animal.move(this.moves[i]);
+            animal.move();
             try {
                 Thread.sleep(this.moveDelay);
             } catch (InterruptedException e) {

@@ -11,8 +11,5 @@ public class Tree extends AbstractWorldMapElement{
         return "src/main/resources/grass.png";
     }
 
-    /*public String toString(){
-       return "*";
-    }*/
 
 }

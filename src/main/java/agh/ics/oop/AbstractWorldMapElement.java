@@ -7,11 +7,6 @@ public abstract class AbstractWorldMapElement implements IMapElement{
     protected  Vector2d position;
     protected List<IPositionChangeObserver> observers = new ArrayList<>();
 
-    public String toString(){
-        if( this instanceof Animal)
-            return ((Animal) this).getOrient().shortString();
-        return "*";
-    }
 
     public boolean isAt(Vector2d pos) {
         return this.position.equals(pos);

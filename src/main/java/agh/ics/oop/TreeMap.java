@@ -1,9 +1,9 @@
 package agh.ics.oop;
 
 
-public class GrassField extends AbstractWorldMap {
-
-    public GrassField(int x){
+public class TreeMap extends AbstractWorldMap {
+    public Vector2d rightUpCorner;
+    public TreeMap(int x){
         placeGrass(x);
     }
 
@@ -21,8 +21,7 @@ public class GrassField extends AbstractWorldMap {
             }
             Tree kempka = new Tree(grassPosition);
             natures.put(grassPosition, kempka);
-            boundaryMap.positionChanged(new Vector2d(999, 999), grassPosition);
-            kempka.addObserver(boundaryMap);
+
         }
     }
 
@@ -34,17 +33,13 @@ public class GrassField extends AbstractWorldMap {
             this.placeGrass(1);
     }
 
-
+    @Override
     public Vector2d findingUpperCorner() {
-        if (boundaryMap.xCoord.isEmpty())
-            return new Vector2d(0, 0);
-        return new Vector2d(boundaryMap.xCoord.last().x, boundaryMap.yCoord.last().y);
+        return rightUpCorner;
     }
 
     public Vector2d findingLowerCorner(){
-        if(boundaryMap.xCoord.isEmpty())
-            return new Vector2d(0, 0);
-        return new Vector2d (boundaryMap.xCoord.first().x, boundaryMap.yCoord.first().y);
+        return new Vector2d(0, 0);
     }
 }
 
