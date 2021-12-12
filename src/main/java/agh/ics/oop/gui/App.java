@@ -30,7 +30,7 @@ public class App extends Application implements IPositionChangeObserver{
     public void init() throws Exception {
         super.init();
         try {
-            this.map = new PlantMap(10);
+            this.map = new ExtendedMap(10);
             Vector2d[] positions = {new Vector2d(1, 1), new Vector2d(2, 2)};
             engine = new SimulationEngine(map, 3, 900);
 

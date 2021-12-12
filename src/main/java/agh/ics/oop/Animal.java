@@ -16,6 +16,9 @@ public class Animal extends AbstractWorldMapElement{
         this.genome = new Genome();
     }
 
+     public boolean isAnimalDead(){
+         return this.energy <= 0;
+     }
 
     public void move(){
         int move = genome.getGene();
@@ -44,7 +47,11 @@ public class Animal extends AbstractWorldMapElement{
     }
 
     public void yummy(){
-        this.energy = this.energy + plantEnergy;
+        this.energy += plantEnergy;
+    }
+
+    public void exercise(){
+        this.energy -= moveEnergy;
     }
 
     private void turn(int x) {
