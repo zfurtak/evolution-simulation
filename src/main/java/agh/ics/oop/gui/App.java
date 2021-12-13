@@ -14,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import java.io.FileNotFoundException;
+import java.util.LinkedList;
 
 import static java.lang.System.exit;
 
@@ -42,12 +43,11 @@ public class App extends Application implements IPositionChangeObserver{
 
     @Override
     public void start(Stage primaryStage) throws FileNotFoundException {
-        for(Vector2d object : map.getAnimals().keySet()){
-            if(map.getElement(object) instanceof Animal){
-                map.getElement(object).addObserver(this);
+        for (LinkedList<Animal> list : map.getAnimals().values()) {
+            for(Animal animal : list){
+                animal.addObserver(this);
             }
         }
-
         Button button = new Button("Start");
         TextField textField = new TextField("f f f f f f");
 
@@ -55,8 +55,8 @@ public class App extends Application implements IPositionChangeObserver{
         button.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
-                MoveDirection[] moves = OptionsParser.parse(textField.getText().split(" "));
-                engine.getMoves(moves);
+                //MoveDirection[] moves =
+                //engine.getMoves(moves);
                 Thread thread = new Thread(engine);
                 thread.start();
             }
@@ -127,7 +127,7 @@ private void makeGrid() throws FileNotFoundException {
         for (int j = leftDownCorner.y; j <= rightUpCorner.y; j++) {
             Vector2d pos = new Vector2d(i, j);
             if (map.objectAt(pos) != null) {
-                GuiElementBox VBox = new GuiElementBox(map.getElement(pos));
+                GuiElementBox VBox = new GuiElementBox(map.getAnimals().get(pos).get(0));
                 grid.add(VBox.getBox(), pos.x - leftDownCorner.x + 1,
                         rightUpCorner.y - pos.y + 1, 1, 1);
                 GridPane.setHalignment(label1, HPos.CENTER);

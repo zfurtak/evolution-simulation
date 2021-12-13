@@ -7,23 +7,7 @@ import static java.lang.System.*;
 
 public class World {
     public static void main(String[] args){
-        Application.launch(App.class, args);
+        
 
-    }
-
-    public static MoveDirection[] toEnum(String [] args) {
-        int size = args.length;
-        MoveDirection[] kierunki = new MoveDirection[size];
-        int i = 0;
-        for (String arg : args) {
-            switch (arg) {
-                case "f" -> kierunki[i] = MoveDirection.FORWARD;
-                case "r" -> kierunki[i] = MoveDirection.RIGHT;
-                case "l" -> kierunki[i] = MoveDirection.LEFT;
-                case "b" -> kierunki[i] = MoveDirection.BACKWARD;
-            }
-            i++;
-        }
-            return kierunki;
     }
     }

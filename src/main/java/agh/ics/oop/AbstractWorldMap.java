@@ -1,9 +1,10 @@
 package agh.ics.oop;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Comparator;
+
 
 
 public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
@@ -33,7 +34,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
             animalsNewPlace.add(animal);
         }
     }
-    
+
     public void moveAnimals() {
         for (LinkedList<Animal> list : this.animals.values()) {
             for(Animal animal : list){
@@ -42,11 +43,48 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         }
     }
 
+    //changing animals' energy after a day
     public void useAnimalEnergy(){
         for (LinkedList<Animal> list : this.animals.values()) {
             for(Animal animal : list){
                 animal.exercise();
             }
+        }
+    }
+
+    // eating plants and dividing it to animals with same energy
+
+    public void eatingPlant(Vector2d position){
+        LinkedList<Animal> animalsList = animals.get(position);
+        animalsList.sort(new EnergyComp());
+        int mostEnergy = animalsList.get(0).getEnergy();
+        int i = 0;
+        int counter = 0;
+        while(animalsList.get(i).getEnergy() == mostEnergy){
+            counter ++;
+            i ++;
+        }
+        for(int j = 0; j < counter; j++){
+            animalsList.get(j).yummy(counter);
+        }
+    }
+
+
+    //reproducing
+
+    public void makingLittleAnimal(Vector2d position){
+        LinkedList<Animal> animalsList = animals.get(position);
+        animalsList.sort(new EnergyComp());
+        int childEnergy = (int) ((animalsList.get(0).getEnergy() + animalsList.get(1).getEnergy()) / 4);
+        Animal baby = new Animal(this, childEnergy, animalsList.get(0), animalsList.get(1));
+        animalsList.get(0).reproduce(animalsList.get(1));
+    }
+
+
+    static class EnergyComp implements Comparator<Animal>{
+        @Override
+        public int compare(Animal a1, Animal a2) {
+            return a1.getEnergy() - a2.getEnergy();
         }
     }
 
@@ -66,6 +104,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     public void placePlants(int amount) {
         int x, y;
         Vector2d plantPosition;
+
         // plant growing in the jungle
 
         for (int i = 0; i < (int) (amount / 2); i++) {
@@ -99,12 +138,16 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
 
     // all the stuff with elements on the map
 
-    public LinkedList<Animal> getAnimals(Vector2d pos) {
-        return this.animals.get(pos);
+    public LinkedHashMap<Vector2d, LinkedList<Animal>> getAnimals() {
+        return this.animals;
     }
 
     public boolean isOccupied(Vector2d position) {
         return animals.get(position) != null && plants.get(position) != null;
+    }
+
+    public boolean isPlantThere(Vector2d position){
+        return plants.get(position) != null;
     }
 
     public Object objectAt(Vector2d position) {

@@ -9,19 +9,27 @@ public class Animal extends AbstractWorldMapElement{
 
 
     public Animal(AbstractWorldMap map) {
-        this.position = new Vector2d((int) (Math.random() * 10), (int) (Math.random() * 10));
+        this.position = new Vector2d((int) (Math.random() * map.width), (int) (Math.random() * map.height));
         //this.position = new Vectord2d((int) (Math.random() * map.width), (int) (Math.random() * map.height));
         this.map = map;
-        this.energy = 10;
+        this.energy = startEnergy;
         this.genome = new Genome();
     }
 
-     public boolean isAnimalDead(){
+    public Animal(AbstractWorldMap map, int energyValue, Animal mum, Animal dad) {
+        this.position = new Vector2d((int) (Math.random() * map.width), (int) (Math.random() * map.height));
+        //this.position = new Vectord2d((int) (Math.random() * map.width), (int) (Math.random() * map.height));
+        this.map = map;
+        this.energy = energyValue;
+        this.genome = new Genome(mum, dad);
+    }
+
+    public boolean isAnimalDead(){
          return this.energy <= 0;
      }
 
     public void move(){
-        int move = genome.getGene();
+        int move = genome.randomGene();
         switch (move){
             case 0 -> {
                 Vector2d newPosition = this.position.add(this.orient.toUnitVector());
@@ -46,8 +54,13 @@ public class Animal extends AbstractWorldMapElement{
         }
     }
 
-    public void yummy(){
-        this.energy += plantEnergy;
+    public void yummy(int x){
+        this.energy += (int)(plantEnergy/x);
+    }
+
+    public void reproduce(Animal partner){
+        this.energy -= this.energy * 0.25;
+        partner.energy -= partner.energy * 0.25;
     }
 
     public void exercise(){
@@ -62,6 +75,14 @@ public class Animal extends AbstractWorldMapElement{
     }
 
 
+    public int getEnergy(){
+        return this.energy;
+    }
+
+    public int getGene(int i){
+        return this.genome.genomeArray[i];
+    }
+
     public MapDirection getOrient() {
         return this.orient;
     }
@@ -69,11 +90,6 @@ public class Animal extends AbstractWorldMapElement{
 
     @Override
     public String getPath() {
-        return switch (((Animal) this).getOrient()){
-            case NORTH, NORTH_WEST, SOUTH_WEST, SOUTH_EAST, NORTH_EAST -> "src/main/resources/up_doggo.png";
-            case SOUTH -> "src/main/resources/down_doggo.png";
-            case WEST -> "src/main/resources/left_doggo.png";
-            case EAST -> "src/main/resources/right_doggo.png" ;
-        };
-        };
+        return "src/main/resources/up_doggo.png";
+        }
     }
