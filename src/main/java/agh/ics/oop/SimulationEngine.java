@@ -15,7 +15,7 @@ public class SimulationEngine implements IEngine, Runnable{
         for (int i = 0; i < animalQuantity; i++){
             Animal animal = new Animal(map);
             this.animals.add(animal);
-            map.place(animal);
+            map.placeAnimal(animal);
         }
     }
 

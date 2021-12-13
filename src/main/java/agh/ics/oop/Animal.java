@@ -88,6 +88,10 @@ public class Animal extends AbstractWorldMapElement{
     }
 
 
+    public String toString() {
+        return "Z";
+    }
+
     @Override
     public String getPath() {
         return "src/main/resources/up_doggo.png";

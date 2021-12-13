@@ -88,9 +88,9 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         }
     }
 
-    // putting animals and plants on the map
+    // putting animals
 
-    public boolean place(Animal animal) {
+    public boolean placeAnimal(Animal animal) {
         if (canMoveTo(animal.getPosition())) {
             this.animals.get(animal.getPosition()).add(animal);
             animal.addObserver(this);
@@ -100,6 +100,8 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         }
     }
 
+
+    // placing plants on the map
 
     public void placePlants(int amount) {
         int x, y;
