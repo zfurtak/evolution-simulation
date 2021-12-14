@@ -7,7 +7,7 @@ import static java.lang.System.*;
 
 public class World {
     public static void main(String[] args){
-        int plantEnergy = 10;
+        /*int plantEnergy = 10;
         int moveEnergy = 1;
         int startEnergy = 10;
         int height = 10;
@@ -17,7 +17,8 @@ public class World {
         Animal pam = new Animal(map);
         map.placeAnimal(jim);
         map.placeAnimal(pam);
-        out.println(map.toString());
+        out.println(map.toString());*/
+        Application.launch(App.class);
 
     }
     }
