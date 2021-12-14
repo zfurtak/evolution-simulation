@@ -8,9 +8,15 @@ public class ExtendedMap extends AbstractWorldMap {
     }
 
 
+    @Override
+    public boolean canMoveTo(Vector2d position) {
+        return false;
+    }
 
-
-
+    @Override
+    public boolean isOccupied(Vector2d position) {
+        return false;
+    }
 }
 
 

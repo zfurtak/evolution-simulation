@@ -8,21 +8,17 @@ import java.util.Comparator;
 
 
 public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
-
     protected LinkedHashMap<Vector2d, LinkedList<Animal>> animals = new LinkedHashMap<>();
     protected LinkedHashMap<Vector2d, Plant> plants = new LinkedHashMap<>();
     protected Vector2d rightUpCorner;
     protected int height;
     protected int width;
     protected int jungleRatio;
-    private int minReproduceEnergy;
+    protected int startEnergy;
+    protected int minReproduceEnergy; //// !!!!!!!!!!!!!!!!!!!!!!!!!!!
+    protected int plantEnergy;
+    protected int moveEnergy;
 
-    //just printing
-
-    public String toString() {
-        MapVisualizer mapVisualizer = new MapVisualizer(this);
-        return mapVisualizer.draw(findingLowerCorner(), findingUpperCorner());
-    }
 
     // when animals are moving
 
@@ -44,7 +40,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     }
 
     //changing animals' energy after a day
-    public void useAnimalEnergy(){
+    public void animalsEnergyAfterDay(){
         for (LinkedList<Animal> list : this.animals.values()) {
             for(Animal animal : list){
                 animal.exercise();
@@ -88,15 +84,21 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         }
     }
 
-    // putting animals
+    // putting start animals (animals have to be on different spots)
+    // used also when copies are made in magic version of evolution
 
     public boolean placeAnimal(Animal animal) {
-        if (canMoveTo(animal.getPosition())) {
-            this.animals.get(animal.getPosition()).add(animal);
+        Vector2d location = animal.getPosition();
+        if (canMoveTo(location) && !isAnimalThere(location)) {
+            if(this.animals.get(location) == null){
+                this.animals.put(location, new LinkedList<Animal>());
+            }else{
+                this.animals.get(location).add(animal);
+            }
             animal.addObserver(this);
             return true;
         } else {
-            throw new IllegalArgumentException("Can't place animal on" + animal.getPosition());
+            throw new IllegalArgumentException("Can't place animal on" + location);
         }
     }
 
@@ -127,10 +129,15 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
             x = (int) (Math.random() * this.width);
             y = (int) (Math.random() * this.height);
             plantPosition = new Vector2d(x, y);
+            int counter = 0;
             while (isOccupied(plantPosition) || (x <= (this.width * jungleRatio) && y <= (this.height * jungleRatio))) {
+                counter ++;
                 x = (int) (Math.random() * Math.sqrt(amount * 10));
                 y = (int) (Math.random() * Math.sqrt(amount * 10));
                 plantPosition = new Vector2d(x, y);
+                if(counter == 10){
+
+                }
             }
             Plant steppePlant = new Plant(plantPosition);
             plants.put(plantPosition, steppePlant);
@@ -144,8 +151,18 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         return this.animals;
     }
 
-    public boolean isOccupied(Vector2d position) {
-        return animals.get(position) != null && plants.get(position) != null;
+    public boolean isCrowded(Vector2d position) {
+        return animals.get(position).size() > 1;
+    }
+
+    abstract public boolean canMoveTo(Vector2d pos);
+
+    public boolean isAnimalThere(Vector2d position){
+        return animals.get(position) != null;
+    }
+
+    public boolean isOccupied(Vector2d pos){
+        return (isAnimalThere(pos) || isPlantThere(pos));
     }
 
     public boolean isPlantThere(Vector2d position){
@@ -156,10 +173,6 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         if(animals.get(position) != null)
             return animals.get(position);
         return plants.get(position);
-    }
-
-    public boolean canMoveTo(Vector2d position) {
-        return !(objectAt(position) instanceof Animal);
     }
 
     // just giving back corners of the map

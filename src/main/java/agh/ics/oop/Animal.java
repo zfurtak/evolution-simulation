@@ -1,7 +1,7 @@
 package agh.ics.oop;
 
 public class Animal extends AbstractWorldMapElement{
-    private MapDirection orient = this.orient.startOrient();
+    private MapDirection orient = MapDirection.NORTH;
     private AbstractWorldMap map;
     private int energy;
     private Genome genome;
@@ -11,8 +11,9 @@ public class Animal extends AbstractWorldMapElement{
     public Animal(AbstractWorldMap map) {
         this.position = new Vector2d((int) (Math.random() * map.width), (int) (Math.random() * map.height));
         //this.position = new Vectord2d((int) (Math.random() * map.width), (int) (Math.random() * map.height));
+        this.orient = this.orient.startOrient();
         this.map = map;
-        this.energy = startEnergy;
+        this.energy = map.startEnergy;
         this.genome = new Genome();
     }
 
@@ -55,7 +56,7 @@ public class Animal extends AbstractWorldMapElement{
     }
 
     public void yummy(int x){
-        this.energy += (int)(plantEnergy/x);
+        this.energy += (int)(map.plantEnergy/x);
     }
 
     public void reproduce(Animal partner){
@@ -64,7 +65,7 @@ public class Animal extends AbstractWorldMapElement{
     }
 
     public void exercise(){
-        this.energy -= moveEnergy;
+        this.energy -= map.moveEnergy;
     }
 
     private void turn(int x) {
