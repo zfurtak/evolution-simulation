@@ -20,6 +20,7 @@ import static java.lang.System.exit;
 
 public class App extends Application implements IPositionChangeObserver {
     AbstractWorldMap map;
+    AbstractWorldMap map1;
     int size = 50;
 
 
@@ -37,9 +38,11 @@ public class App extends Application implements IPositionChangeObserver {
         firstBox.setAlignment(Pos.CENTER);
 
 
-        VBox secondBox = new VBox(10);
+        HBox secondBox = new HBox(10);
+        secondBox.getChildren().addAll(new SideBox(map).getSideBox(), new SideBox(map1).getSideBox());
 
-        Scene scene = new Scene(firstBox, 800, 700);
+        //Scene scene = new Scene(firstBox, 800, 700);
+        Scene scene = new Scene(secondBox, 800, 700);
         stage.setScene(scene);
         stage.setTitle("Zuzinka did it");
         stage.show();
