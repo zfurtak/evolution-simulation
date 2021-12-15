@@ -9,7 +9,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+
 
 import java.io.FileNotFoundException;
 
@@ -75,7 +75,7 @@ public class CustomMap {
                 Vector2d pos = new Vector2d(i, j);
                 GuiElementBox guiBox;
 
-                if (map.objectAt(pos) != null && map.getAnimals().get(pos) != null && map.getAnimals().get(pos).size() >= 1) {
+                if (map.objectAt(pos) != null && map.getAnimals().get(pos) != null && !map.getAnimals().get(pos).isEmpty()) {
                     map.getAnimals().get(pos).sort(new AbstractWorldMap.EnergyComp());
                     guiBox = new GuiElementBox(map.getAnimals().get(pos).get(0));
                     grid.add(guiBox.getBox(), pos.x + 1,

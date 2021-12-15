@@ -17,7 +17,7 @@ public class GuiElementBox extends Node {
     public GuiElementBox(AbstractWorldMapElement object) throws FileNotFoundException {
         Image image = null;
         try {
-            image = new Image(new FileInputStream("src/main/resources/animal.png"));//new Image(new FileInputStream(object.getPath()));
+            image = new Image(new FileInputStream(object.getPath()));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.out.println(e.getMessage());

@@ -18,6 +18,8 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     protected int minReproduceEnergy; //// !!!!!!!!!!!!!!!!!!!!!!!!!!!
     protected int plantEnergy;
     protected int moveEnergy;
+    protected Vector2d jungleDownCorner;
+    protected Vector2d jungleUpCorner;
 
 
     // when animals are moving
@@ -92,18 +94,24 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     // used also when copies are made in magic version of evolution
 
     public boolean placeAnimal(Animal animal) {
-        Vector2d location = animal.getPosition();
-        if (canMoveTo(location) && !isAnimalThere(location)) {
-            if(this.animals.get(location) == null){
-                this.animals.put(location, new LinkedList<Animal>());
-            }else{
-                this.animals.get(location).add(animal);
+        Vector2d location = new Vector2d((int) (Math.random() * this.width), (int) (Math.random() * this.height));
+        int counter = 0;
+        while(isOccupied(location)) {
+            counter ++;
+            location = new Vector2d((int) (Math.random() * this.width), (int) (Math.random() * this.height));
+            if(counter == (width*height/2)){
+                throw new IllegalArgumentException("Can't place animal on" + location);
             }
-            animal.addObserver(this);
-            return true;
-        } else {
-            throw new IllegalArgumentException("Can't place animal on" + location);
         }
+        animal.setPosition(location);
+        if(this.animals.get(location) == null){
+            this.animals.put(location, new LinkedList<Animal>());
+            this.animals.get(location).add(animal);
+        }else{
+            this.animals.get(location).add(animal);
+        }
+        animal.addObserver(this);
+        return true;
     }
 
     //putting baby animal on the map
@@ -126,28 +134,32 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         x = (int) (Math.random() * (this.width * jungleRatio));
         y = (int) (Math.random() * (this.height * jungleRatio));
         plantPosition = new Vector2d(x, y);
+        int counter = 0;
         while(isOccupied(plantPosition)) {
+            counter ++;
             x = (int) (Math.random() * Math.sqrt(10));
-            y = (int) (Math.random() * Math.sqrt(10));  ///JAK DZIAŁA RANDOM
+            y = (int) (Math.random() * Math.sqrt(10));  ///JAK DZIALA RANDOM
             plantPosition = new Vector2d(x, y);
+            if(counter == 11){
+                plantPosition = jungleResearch();
+                break;
+            }
         }
-        Plant junglePlant = new Plant(plantPosition);
-        plants.put(plantPosition, junglePlant);
+        if(plantPosition != null){
+            Plant junglePlant = new Plant(plantPosition);
+            plants.put(plantPosition, junglePlant);
+        }
 
         // plant growing outside the jungle, on steppe
 
         x = (int) (Math.random() * this.width);
         y = (int) (Math.random() * this.height);
         plantPosition = new Vector2d(x, y);
-        int counter = 0;
+
         while (isOccupied(plantPosition) || (x <= (this.width * jungleRatio) && y <= (this.height * jungleRatio))) {
-            counter ++;
             x = (int) (Math.random() * Math.sqrt(10));
             y = (int) (Math.random() * Math.sqrt(10));
             plantPosition = new Vector2d(x, y);
-            if(counter == 10){
-
-            }
         }
         Plant steppePlant = new Plant(plantPosition);
         plants.put(plantPosition, steppePlant);
@@ -155,9 +167,15 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     }
 
 
-    public void jungleResearch(){
-        for(int i = 0; i < ) //////////////// WSPOLRZEDNE JUNGLI
-
+    public Vector2d jungleResearch(){
+        for(int i = jungleDownCorner.x; i < jungleUpCorner.x; i++){
+            for(int j = jungleDownCorner.y; j < jungleUpCorner.y; j++){
+                if(!isOccupied(new Vector2d(i, j))){
+                    return new Vector2d(i, j);
+                }
+            }
+        }
+        return null;
     }
 
     // all the stuff with elements on the map
