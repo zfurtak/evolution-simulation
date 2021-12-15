@@ -17,7 +17,7 @@ public class GuiElementBox extends Node {
     public GuiElementBox(AbstractWorldMapElement object) throws FileNotFoundException {
         Image image = null;
         try {
-            image = new Image(new FileInputStream(object.getPath()));
+            image = new Image(new FileInputStream("src/main/resources/animal.png"));//new Image(new FileInputStream(object.getPath()));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
@@ -26,9 +26,8 @@ public class GuiElementBox extends Node {
         ImageView imageView = new ImageView(image);
         imageView.setFitWidth(30);
         imageView.setFitHeight(30);
-        Label label = new Label(object.getPosition().x+", "+object.getPosition().y);
-        vbox = new VBox(0); // spacing = 8
-        vbox.getChildren().addAll(imageView, label);
+        vbox = new VBox(0);
+        vbox.getChildren().addAll(imageView);
         vbox.setPrefWidth(100);
         vbox.setAlignment(Pos.CENTER);
     }

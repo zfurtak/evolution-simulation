@@ -2,9 +2,9 @@ package agh.ics.oop;
 
 public class NotExtendedMap extends AbstractWorldMap{
 
-    public NotExtendedMap(int plantsQuantity, int height, int width, int jungleRatioVal,
+    public NotExtendedMap(int height, int width, double jungleRatioVal,
                           int startEnergyVal, int plantEnergyVal, int moveEnergyVal){
-        placePlants(plantsQuantity);
+        placePlants();
         this.height = height;
         this.width = width;
         this.rightUpCorner = new Vector2d(width - 1, height - 1);

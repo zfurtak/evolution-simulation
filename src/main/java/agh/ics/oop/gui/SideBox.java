@@ -8,10 +8,12 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.io.FileNotFoundException;
+
 public class SideBox {
     VBox mainBox;
 
-    public SideBox(AbstractWorldMap map){
+    public SideBox(AbstractWorldMap map) throws FileNotFoundException {
         HBox topBox = new TopBox(map).getTopBox();
         VBox chart = new VBox(getChart());
         HBox downBox = new Buttons(map).getButtons();

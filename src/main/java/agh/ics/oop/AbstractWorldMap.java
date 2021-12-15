@@ -13,7 +13,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     protected Vector2d rightUpCorner;
     protected int height;
     protected int width;
-    protected int jungleRatio;
+    protected double jungleRatio;
     protected int startEnergy;
     protected int minReproduceEnergy; //// !!!!!!!!!!!!!!!!!!!!!!!!!!!
     protected int plantEnergy;
@@ -71,13 +71,17 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     public void makingLittleAnimal(Vector2d position){
         LinkedList<Animal> animalsList = animals.get(position);
         animalsList.sort(new EnergyComp());
-        int childEnergy = (int) ((animalsList.get(0).getEnergy() + animalsList.get(1).getEnergy()) / 4);
-        Animal baby = new Animal(this, childEnergy, animalsList.get(0), animalsList.get(1));
-        animalsList.get(0).reproduce(animalsList.get(1));
+        if (animalsList.get(1).getEnergy() >= minReproduceEnergy) {
+            int childEnergy = (int) ((animalsList.get(0).getEnergy() + animalsList.get(1).getEnergy()) / 4);
+            Animal baby = new Animal(this, childEnergy, animalsList.get(0), animalsList.get(1));
+            baby.position = position;
+            animalsList.get(0).reproduce(animalsList.get(1));
+            placeBaby(baby);
+        }
     }
 
 
-    static class EnergyComp implements Comparator<Animal>{
+    public static class EnergyComp implements Comparator<Animal>{
         @Override
         public int compare(Animal a1, Animal a2) {
             return a1.getEnergy() - a2.getEnergy();
@@ -102,53 +106,68 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         }
     }
 
+    //putting baby animal on the map
+
+    public void placeBaby(Animal animal){
+        Vector2d location = animal.getPosition();
+        this.animals.get(location).add(animal);
+        animal.addObserver(this);
+    }
 
     // placing plants on the map
 
-    public void placePlants(int amount) {
+    public void placePlants() {
         int x, y;
         Vector2d plantPosition;
 
         // plant growing in the jungle
 
-        for (int i = 0; i < (int) (amount / 2); i++) {
-            x = (int) (Math.random() * (this.width * jungleRatio));
-            y = (int) (Math.random() * (this.height * jungleRatio));
+
+        x = (int) (Math.random() * (this.width * jungleRatio));
+        y = (int) (Math.random() * (this.height * jungleRatio));
+        plantPosition = new Vector2d(x, y);
+        while(isOccupied(plantPosition)) {
+            x = (int) (Math.random() * Math.sqrt(10));
+            y = (int) (Math.random() * Math.sqrt(10));  ///JAK DZIAŁA RANDOM
             plantPosition = new Vector2d(x, y);
-            while(isOccupied(plantPosition)) {
-                x = (int) (Math.random() * Math.sqrt(amount * 10));
-                y = (int) (Math.random() * Math.sqrt(amount * 10));
-                plantPosition = new Vector2d(x, y);
-            }
-            Plant junglePlant = new Plant(plantPosition);
-            plants.put(plantPosition, junglePlant);
         }
+        Plant junglePlant = new Plant(plantPosition);
+        plants.put(plantPosition, junglePlant);
+
         // plant growing outside the jungle, on steppe
 
-        for (int i = 0; i < (int) (amount / 2); i++) {
-            x = (int) (Math.random() * this.width);
-            y = (int) (Math.random() * this.height);
+        x = (int) (Math.random() * this.width);
+        y = (int) (Math.random() * this.height);
+        plantPosition = new Vector2d(x, y);
+        int counter = 0;
+        while (isOccupied(plantPosition) || (x <= (this.width * jungleRatio) && y <= (this.height * jungleRatio))) {
+            counter ++;
+            x = (int) (Math.random() * Math.sqrt(10));
+            y = (int) (Math.random() * Math.sqrt(10));
             plantPosition = new Vector2d(x, y);
-            int counter = 0;
-            while (isOccupied(plantPosition) || (x <= (this.width * jungleRatio) && y <= (this.height * jungleRatio))) {
-                counter ++;
-                x = (int) (Math.random() * Math.sqrt(amount * 10));
-                y = (int) (Math.random() * Math.sqrt(amount * 10));
-                plantPosition = new Vector2d(x, y);
-                if(counter == 10){
+            if(counter == 10){
 
-                }
             }
-            Plant steppePlant = new Plant(plantPosition);
-            plants.put(plantPosition, steppePlant);
         }
+        Plant steppePlant = new Plant(plantPosition);
+        plants.put(plantPosition, steppePlant);
+
     }
 
+
+    public void jungleResearch(){
+        for(int i = 0; i < ) //////////////// WSPOLRZEDNE JUNGLI
+
+    }
 
     // all the stuff with elements on the map
 
     public LinkedHashMap<Vector2d, LinkedList<Animal>> getAnimals() {
         return this.animals;
+    }
+
+    public Plant getPlant(Vector2d pos){
+        return plants.get(pos);
     }
 
     public boolean isCrowded(Vector2d position) {
@@ -181,7 +200,4 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         return rightUpCorner;
     }
 
-    public Vector2d findingLowerCorner(){
-        return new Vector2d(0, 0);
-    }
 }
