@@ -4,14 +4,15 @@ import agh.ics.oop.AbstractWorldMap;
 import agh.ics.oop.Vector2d;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 
 import java.io.FileNotFoundException;
+
+import static javax.swing.text.StyleConstants.Background;
 
 public class CustomMap {
     GridPane grid = new GridPane();
@@ -55,7 +56,6 @@ public class CustomMap {
         grid.setGridLinesVisible(true);
 
 
-
         for (int i = 0; i <= rightUpCorner.x; i++) {
             Label label2 = new Label(" " + i + " ");
             grid.add(label2, i + 1, 0, 1, 1);
@@ -80,13 +80,12 @@ public class CustomMap {
                     guiBox = new GuiElementBox(map.getAnimals().get(pos).get(0));
                     grid.add(guiBox.getBox(), pos.x + 1,
                             rightUpCorner.y - pos.y + 1, 1, 1);
-                    GridPane.setHalignment(label1, HPos.CENTER);
 
                 }else if(map.isPlantThere(pos)){
                     guiBox = new GuiElementBox(map.getPlant(pos));
                     grid.add(guiBox.getBox(), pos.x + 1,
                             rightUpCorner.y - pos.y + 1, 1, 1);
-                    GridPane.setHalignment(label1, HPos.CENTER);
+
                 }
             }
         }

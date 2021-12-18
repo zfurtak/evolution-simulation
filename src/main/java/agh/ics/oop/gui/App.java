@@ -2,42 +2,27 @@ package agh.ics.oop.gui;
 
 import agh.ics.oop.*;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import java.io.FileNotFoundException;
-import java.util.LinkedList;
 
-import static java.lang.System.exit;
+import static java.lang.System.out;
 
-public class App extends Application implements IPositionChangeObserver {
+public class App extends Application {
     AbstractWorldMap map1;
     AbstractWorldMap map2;
     GridPane mainView = new GridPane();
 
     public void init() throws Exception {
         super.init();
-        this.map1 = new NotExtendedMap(10, 10, 0.2, 10, 10, 1);
-        this.map2 = new NotExtendedMap(10, 10, 0.3,2, 10, 1);
+        this.map1 = new NotExtendedMap(10, 10, 0.1, 10, 10, 1);
+        this.map2 = new NotExtendedMap(10, 10, 0.1,2, 10, 1);
         Animal jim = new Animal(map1);
         Animal pam = new Animal(map1);
-        map1.placeAnimal(pam);
-        jim.exercise();
-        jim.exercise();
-        jim.exercise();
-        jim.exercise();
-        map1.placeAnimal(jim);
-        Animal roy = new Animal(map2);
-        roy.exercise();
-        map2.placeAnimal(roy);
+        
 
     }
 
@@ -52,7 +37,7 @@ public class App extends Application implements IPositionChangeObserver {
     }
 
     public void makeGrid() throws FileNotFoundException {
-        VBox parametersBox = new ParametresBox().getParameters();
+        VBox parametersBox = new ParametersBox().getParameters();
         Button start = new Button("Press to start");
         start.setDefaultButton(true);
         VBox firstBox = new VBox(20);
@@ -69,13 +54,6 @@ public class App extends Application implements IPositionChangeObserver {
             mainView.add(secondBox, 0, 0, 1, 1);
             mainView.setAlignment(Pos.CENTER);
         });
-
     }
 
-
-
-    @Override
-    public void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
-
-    }
 }

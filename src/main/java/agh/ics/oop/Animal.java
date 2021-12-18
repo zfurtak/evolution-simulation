@@ -11,7 +11,7 @@ public class Animal extends AbstractWorldMapElement {
         this.orient = this.orient.startOrient();
         this.map = map;
         this.energy = map.startEnergy;
-        this.genome = new Genome();
+        this.genome = new Genome(); ///////// zainteresować sie genomem
     }
 
     public Animal(AbstractWorldMap map, int energyValue, Animal mum, Animal dad) {
@@ -31,11 +31,17 @@ public class Animal extends AbstractWorldMapElement {
 
     public void move() {
         int move = genome.randomGene();
+        System.out.println("gen: "+move);
+        Vector2d newPosition;
+        boolean flag = this.map instanceof ExtendedMap;
         switch (move) {
             case 0 -> {
-                Vector2d newPosition = this.position.add(this.orient.toUnitVector());
-                if (this.map.canMoveTo(newPosition)) {
-                    notify(this.position, newPosition);
+                newPosition = this.position.add(this.orient.toUnitVector());
+                if (flag && !this.map.canMoveTo(newPosition)) {
+                    newPosition = teleport(newPosition);
+                }
+                if(this.map.canMoveTo(newPosition)){
+                    notify(this.position, newPosition, this);
                     this.position = newPosition;
                 }
             }
@@ -43,9 +49,12 @@ public class Animal extends AbstractWorldMapElement {
             case 2 -> turn(2);
             case 3 -> turn(3);
             case 4 -> {
-                Vector2d newPosition = this.position.subtract(this.orient.toUnitVector());
-                if (this.map.canMoveTo(newPosition)) {
-                    notify(this.position, newPosition);
+                newPosition = this.position.subtract(this.orient.toUnitVector());
+                if (flag && !this.map.canMoveTo(newPosition)) {
+                    newPosition = teleport(newPosition);
+                }
+                if(this.map.canMoveTo(newPosition)){
+                    notify(this.position, newPosition, this);
                     this.position = newPosition;
                 }
             }
@@ -55,8 +64,22 @@ public class Animal extends AbstractWorldMapElement {
         }
     }
 
+    public Vector2d teleport(Vector2d newPosition){
+        if(newPosition.x > map.rightUpCorner.x) {
+            newPosition = newPosition.subtract(new Vector2d(map.width, 0));
+        } else if(newPosition.x < 0){
+            newPosition = newPosition.add(new Vector2d(map.width, 0));
+        }
+        if(newPosition.y > map.rightUpCorner.y){
+            newPosition = newPosition.subtract(new Vector2d(0, map.height));
+        } else if(newPosition.y < 0){
+            newPosition = newPosition.add(new Vector2d(0, map.height));
+        }
+        return newPosition;
+    }
+
     public void yummy(int x) {
-        this.energy += (int) (map.plantEnergy / x);
+        this.energy += map.plantEnergy / x;
     }
 
     public void reproduce(Animal partner) {
@@ -72,9 +95,8 @@ public class Animal extends AbstractWorldMapElement {
         for (int i = 0; i < x; i++) {
             this.orient = this.orient.next();
         }
-        notify(this.position, this.position);
+        notify(this.position, this.position, this);
     }
-
 
     public int getEnergy() {
         return this.energy;
@@ -87,7 +109,6 @@ public class Animal extends AbstractWorldMapElement {
     public MapDirection getOrient() {
         return this.orient;
     }
-
 
     @Override
     public String getPath() {

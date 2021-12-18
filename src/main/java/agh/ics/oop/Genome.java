@@ -17,6 +17,8 @@ public class Genome {
         getGenome(mum, dad);
     }
 
+    //getting genome for baby
+
     public void getGenome(Animal mum, Animal dad){
         int mumEnergy = mum.getEnergy();
         int dadEnergy = dad.getEnergy();
@@ -33,7 +35,7 @@ public class Genome {
     private void fillProperSide(Animal betterParent, Animal worseParent, int betterEnergy, int wholeEnergy, int option){
         switch(option){
             case 0 -> { // filling right side by betterParent
-                int bound = (int) size*(betterEnergy/wholeEnergy);
+                int bound =  size*(betterEnergy/wholeEnergy);
                 for(int i = 0; i < bound; i++){
                     this.genomeArray[i] = betterParent.getGene(i);
                 }
@@ -42,7 +44,7 @@ public class Genome {
                 }
             }
             case 1 -> { // filling left side by betterParent
-                int bound = (int) size * (1 - (betterEnergy/wholeEnergy));
+                int bound = size * (1 - (betterEnergy/wholeEnergy));
                 for(int i = 0; i < bound; i++){
                     this.genomeArray[i] = worseParent.getGene(i);
                 }
@@ -60,8 +62,7 @@ public class Genome {
         }
         Arrays.sort(this.genomeArray);
     }
-    
-    
+
     // picking random gene from genome with appropriate probability
 
     public int randomGene(){

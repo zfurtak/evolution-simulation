@@ -2,7 +2,7 @@ package agh.ics.oop;
 
 import java.util.ArrayList;
 
-public class SimulationEngine implements IEngine, Runnable{
+public class SimulationEngine implements Runnable{
     private MoveDirection[] moves;
     private final ArrayList<Animal> animals;
     private final AbstractWorldMap map;

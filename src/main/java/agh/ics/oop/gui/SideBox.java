@@ -23,6 +23,7 @@ public class SideBox {
     public VBox getSideBox(){
         return mainBox;
     }
+
     public LineChart getChart(){
         LineChart<Number, Number> chart = new LineChart<>(new NumberAxis(), new NumberAxis());
         XYChart.Series<Number, Number> series = new XYChart.Series<>();

@@ -14,27 +14,8 @@ public class Vector2d {
     public int hashCode() {
         return Objects.hash(this.x, this.y);
     }
-    public String to_String(){ return "(" + this.x + "," + this.y + ")";}
     public boolean precedes(Vector2d vec){ return vec.x >= this.x && vec.y >= this.y; }
     public boolean follows(Vector2d vec){ return vec.x <= this.x && vec.y <= this.y; }
-    public Vector2d upperRight(Vector2d vec){
-        int a = this.x;
-        int b = this.y;
-        if(vec.x >= this.x)
-            a = vec.x;
-        if (vec.y >= this.y)
-            b = vec.y;
-        return new Vector2d(a, b);
-    }
-    public Vector2d lowerLeft(Vector2d vec){
-        int a = this.x;
-        int b = this.y;
-        if(vec.x <= this.x)
-            a = vec.x;
-        if (vec.y <= this.y)
-            b = vec.y;
-        return new Vector2d(a, b);
-    }
     public Vector2d add(Vector2d vec){
         return new Vector2d(this.x+vec.x, this.y+vec.y);
     }
@@ -48,9 +29,6 @@ public class Vector2d {
         if (o == null || getClass() != o.getClass()) return false;
         Vector2d vector2d = (Vector2d) o;
         return x == vector2d.x && y == vector2d.y;
-    }
-    public Vector2d opposite(){
-        return new Vector2d((-1)*this.x, (-1)*this.y);
     }
 }
 

@@ -6,9 +6,6 @@ import java.util.List;
 public abstract class AbstractWorldMapElement implements IMapElement{
     protected  Vector2d position;
     protected List<IPositionChangeObserver> observers = new ArrayList<>();
-    protected int plantEnergy;
-    protected int moveEnergy;
-    protected int startEnergy;
 
 
     public boolean isAt(Vector2d pos) {
@@ -28,9 +25,9 @@ public abstract class AbstractWorldMapElement implements IMapElement{
         observers.add(observer);
     }
 
-    protected void notify(Vector2d oldPos,Vector2d newPos ){
+    protected void notify(Vector2d oldPos,Vector2d newPos, Animal animal){
         for (IPositionChangeObserver obs: observers) {
-            obs.positionChanged(oldPos, newPos);
+            obs.positionChanged(oldPos, newPos, animal);
         }
     }
 

@@ -14,10 +14,10 @@ import javafx.scene.text.Font;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class ParametresBox {
+public class ParametersBox {
     VBox vbox;
 
-    public ParametresBox() {
+    public ParametersBox() {
         Label title = new Label("Enter parameters, por favor");
         title.setFont(new Font("Arial", 24));
         VBox.setMargin(title, new Insets(0, 0, 30, 0));
@@ -34,7 +34,7 @@ public class ParametresBox {
 
         VBox moveEnergy = new SingleParametersBox("Amount of energy taken after a move", "1").getSingleBox();
 
-        VBox jungleRatio = new SingleParametersBox("Part of the map taken by a jungle", "20%").getSingleBox();
+        VBox jungleRatio = new SingleParametersBox("Part of the map taken by a jungle", "0.2").getSingleBox();
 
         CheckBox notExtendedMap = new CheckBox("Magic evolution for map with bounds");
         CheckBox ExtendedMap= new CheckBox("Magic evolution for map without bounds");
