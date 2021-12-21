@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -12,12 +13,15 @@ import java.io.FileNotFoundException;
 
 public class SideBox {
     VBox mainBox;
+    TopBox topBox;
 
-    public SideBox(AbstractWorldMap map) throws FileNotFoundException {
-        HBox topBox = new TopBox(map).getTopBox();
+    public SideBox(AbstractWorldMap map, Thread thread) throws FileNotFoundException {
+        topBox = new TopBox(map);
+        HBox box = topBox.getTopBox();
         VBox chart = new VBox(getChart());
-        HBox downBox = new Buttons(map).getButtons();
-        mainBox = new VBox(topBox, chart, downBox);
+        //VBox chart = new VBox(new Label("tu bedzie wykres"));
+        HBox downBox = new Buttons(map, thread, true).getButtons();
+        mainBox = new VBox(box, chart, downBox);
     }
 
     public VBox getSideBox(){

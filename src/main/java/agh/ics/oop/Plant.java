@@ -1,15 +1,19 @@
 package agh.ics.oop;
 
-public class Plant extends AbstractWorldMapElement{
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
-    public Plant(Vector2d pos){
+public class Plant extends AbstractWorldMapElement{
+    AbstractWorldMap map;
+
+    public Plant(Vector2d pos, AbstractWorldMap mapDude){
         this.position = pos;
+        this.map = mapDude;
     }
 
     @Override
-    public String getPath() {
-        return "src/main/resources/plant.png";
+    public Image getImage() {
+        return map.getImageLoader().plantImage;
     }
-
 
 }

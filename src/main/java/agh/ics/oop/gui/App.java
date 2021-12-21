@@ -14,46 +14,80 @@ import static java.lang.System.out;
 public class App extends Application {
     AbstractWorldMap map1;
     AbstractWorldMap map2;
+    SideBox leftSide;
+    SideBox rightSide;
     GridPane mainView = new GridPane();
+    ParametersBox parametersBox = new ParametersBox();
+
 
     public void init() throws Exception {
         super.init();
-        this.map1 = new NotExtendedMap(10, 10, 0.1, 10, 10, 1);
-        this.map2 = new NotExtendedMap(10, 10, 0.1,2, 10, 1);
-        Animal jim = new Animal(map1);
-        Animal pam = new Animal(map1);
-        
+
 
     }
 
     @Override
     public void start(Stage stage) throws FileNotFoundException {
         makeGrid();
-        Scene scene = new Scene(mainView, 1000, 800);
+        Scene scene = new Scene(mainView, 1500, 800);
         stage.setScene(scene);
         stage.setTitle("Zuzinka did it");
         stage.show();
 
     }
 
+    public void drawNewMap(AbstractWorldMap map){
+        if(map.equals(map1))
+            this.leftSide.topBox.customMap.positionChanged();
+        else{
+            this.rightSide.topBox.customMap.positionChanged();
+        }
+    }
+
+
+
     public void makeGrid() throws FileNotFoundException {
-        VBox parametersBox = new ParametersBox().getParameters();
         Button start = new Button("Press to start");
         start.setDefaultButton(true);
+
         VBox firstBox = new VBox(20);
-        firstBox.getChildren().addAll(parametersBox, start);
+        firstBox.getChildren().addAll(parametersBox.getParameters(), start);
         firstBox.setAlignment(Pos.CENTER);
         mainView.add(firstBox, 0, 0, 1, 1);
         mainView.setAlignment(Pos.CENTER);
 
-        HBox secondBox = new HBox(10);
-        secondBox.getChildren().addAll(new SideBox(map1).getSideBox(), new SideBox(map2).getSideBox());
-
         start.setOnAction(value ->  {
+            uploadData();
+            SimulationEngine engine1 = new SimulationEngine(this.map1, this);
+            SimulationEngine engine2 = new SimulationEngine(this.map2, this);
+            Thread thread1 = new Thread(engine1);
+            Thread thread2 = new Thread(engine2);
+            try {
+                leftSide = new SideBox(map1, thread1);
+                rightSide = new SideBox(map2, thread2);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            HBox secondBox = new HBox(10);
+            secondBox.getChildren().addAll(leftSide.getSideBox(), rightSide.getSideBox());
             mainView.getChildren().clear();
             mainView.add(secondBox, 0, 0, 1, 1);
             mainView.setAlignment(Pos.CENTER);
+            thread1.start();
+            thread2.start();
         });
     }
 
+    public ParametersBox getParametersBox() {
+        return parametersBox;
+    }
+
+    public void uploadData(){
+        this.map1 = new NotExtendedMap(parametersBox.getHeight(), parametersBox.getWidth(),
+                parametersBox.getJungleRation(),parametersBox.getStartEnergy(), parametersBox.getPlantEnergy(),
+                parametersBox.getMoveEnergy());
+        this.map2 = new ExtendedMap(parametersBox.getHeight(), parametersBox.getWidth(),
+                parametersBox.getJungleRation(),parametersBox.getStartEnergy(), parametersBox.getPlantEnergy(),
+                parametersBox.getMoveEnergy());
+    }
 }

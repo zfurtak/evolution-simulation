@@ -1,26 +1,30 @@
 package agh.ics.oop;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Comparator;
+import agh.ics.oop.gui.ImageLoader;
+import javafx.scene.image.ImageView;
 
+import java.util.*;
+
+import static java.lang.System.out;
 
 
 public abstract class AbstractWorldMap implements IPositionChangeObserver {
     protected LinkedHashMap<Vector2d, LinkedList<Animal>> animals = new LinkedHashMap<>();
     protected LinkedHashMap<Vector2d, Plant> plants = new LinkedHashMap<>();
+    protected LinkedList<Animal> animalLinkedList = new LinkedList<>();
     protected Vector2d rightUpCorner;
     protected int height;
     protected int width;
     protected double jungleRatio;
     protected int startEnergy;
-    protected int minReproduceEnergy; //// !!!!!!!!!!!!!!!!!!!!!!!!!!!
+    protected int minReproduceEnergy;
     protected int plantEnergy;
     protected int moveEnergy;
     protected Vector2d jungleDownCorner;
     protected Vector2d jungleUpCorner;
-
+    protected ImageLoader imageLoader = new ImageLoader();
+    public int animalsQuantity;
+    public int plantsQuantity;
 
 
     // placing plants on the map
@@ -32,11 +36,11 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
 
         // plant growing in the jungle
 
-        x = (int) (Math.random() * (jungleUpCorner.x-jungleDownCorner.x)+jungleDownCorner.x);
-        y = (int) (Math.random() * (jungleUpCorner.y-jungleDownCorner.y)+jungleDownCorner.y);
+        x = (int) (Math.random() * (jungleUpCorner.x-jungleDownCorner.x+1)+jungleDownCorner.x);
+        y = (int) (Math.random() * (jungleUpCorner.y-jungleDownCorner.y+1)+jungleDownCorner.y);
         plantPosition = new Vector2d(x, y);
         int counter = 0;
-        while(isOccupied(plantPosition)) {
+        while(isPlantThere(plantPosition) || isAnimalThere(plantPosition)) {
             counter ++;
             x = (int) (Math.random() * (jungleUpCorner.x-jungleDownCorner.x)+jungleDownCorner.x);
             y = (int) (Math.random() * (jungleUpCorner.y-jungleDownCorner.y)+jungleDownCorner.y);
@@ -47,8 +51,9 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
             }
         }
         if(plantPosition != null){
-            Plant junglePlant = new Plant(plantPosition);
+            Plant junglePlant = new Plant(plantPosition, this);
             plants.put(plantPosition, junglePlant);
+            plantsQuantity ++;
         }
 
         // plant growing outside the jungle, on steppe
@@ -56,17 +61,32 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
         x = (int) (Math.random() * this.width);
         y = (int) (Math.random() * this.height);
         plantPosition = new Vector2d(x, y);
-
-        while (isOccupied(plantPosition) || (jungleDownCorner.x <= x && x <= jungleUpCorner.x
+        counter = 0;
+        while (isPlantThere(plantPosition) || isAnimalThere(plantPosition) || (jungleDownCorner.x <= x && x <= jungleUpCorner.x
                 && jungleDownCorner.y <= y && y <= jungleUpCorner.y)) {
+            counter ++;
             x = (int) (Math.random() * Math.sqrt(10));
             y = (int) (Math.random() * Math.sqrt(10));
             plantPosition = new Vector2d(x, y);
+            if(counter == 10){
+                break;
+            }
         }
-        Plant steppePlant = new Plant(plantPosition);
+        Plant steppePlant = new Plant(plantPosition, this);
         plants.put(plantPosition, steppePlant);
+        plantsQuantity++;
     }
 
+    public Vector2d jungleResearch(){
+        for(int i = jungleDownCorner.x; i <= jungleUpCorner.x; i++){
+            for(int j = jungleDownCorner.y; j <= jungleUpCorner.y; j++){
+                if(!isPlantThere(new Vector2d(i, j)) && !isAnimalThere(new Vector2d(i, j))){
+                    return new Vector2d(i, j);
+                }
+            }
+        }
+        return null;
+    }
 
     // when animals are moving
 
@@ -80,35 +100,37 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
     }
 
     public void moveAnimals() {
-        for (LinkedList<Animal> list : this.animals.values()) {
-            if(list.size() > 0) {
-                for (Animal animal : list) {
-                    animal.move();
-                }
-            }
-        }
-    }
-
-    //changing animals' energy after a day
-    public void animalsEnergyAfterDay(){
-        for (LinkedList<Animal> list : this.animals.values()) {
-            for(Animal animal : list){
+        for (Animal animal : animalLinkedList){
+                animal.move();
                 animal.exercise();
-            }
         }
     }
 
     // eating plants and dividing it to animals with same energy
 
-    public void eatingPlant(Vector2d position){
+    public void eatDinner() {
+        LinkedList<Vector2d> eatenPlants= new LinkedList<>();
+        for (Vector2d position : plants.keySet()) {
+            if (this.isAnimalThere(position)){
+                eatPlant(position);
+                eatenPlants.add(position);
+            }
+        }
+        for(Vector2d position : eatenPlants){
+            plants.remove(position);
+            plantsQuantity --;
+        }
+    }
+
+    public void eatPlant(Vector2d position){
         LinkedList<Animal> animalsList = animals.get(position);
         animalsList.sort(new EnergyComp());
         int mostEnergy = animalsList.get(0).getEnergy();
-        int i = 0;
         int counter = 0;
-        while(animalsList.get(i).getEnergy() == mostEnergy){
-            counter ++;
-            i ++;
+        for (Animal animal : animalsList) {
+            if (animal.getEnergy() == mostEnergy) {
+                counter++;
+            }
         }
         for(int j = 0; j < counter; j++){
             animalsList.get(j).yummy(counter);
@@ -117,7 +139,19 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
 
     //reproducing
 
-    public void makingLittleAnimal(Vector2d position){
+    public void makeLove(){
+        Vector2d currentPosition;
+        for(int i = 0; i < width; i++){
+            for(int j = 0; j < height; j++){
+                currentPosition = new Vector2d(i, j);
+                if(isCrowded(currentPosition)){
+                    makeLittleAnimal(currentPosition);
+                }
+            }
+        }
+    }
+
+    public void makeLittleAnimal(Vector2d position){
         LinkedList<Animal> animalsList = animals.get(position);
         animalsList.sort(new EnergyComp());
         if (animalsList.get(1).getEnergy() >= minReproduceEnergy) {
@@ -126,9 +160,33 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
             baby.position = position;
             animalsList.get(0).reproduce(animalsList.get(1));
             placeBaby(baby);
+            this.animalsQuantity ++;
         }
     }
 
+    public void placeBaby(Animal animal){
+        Vector2d location = animal.getPosition();
+        this.animals.get(location).add(animal);
+        animal.addObserver(this);
+        animalLinkedList.add(animal);
+    }
+
+    //removing dead animals
+
+    public void removeDeadAnimals(){
+        ArrayList<Animal> deadAnimals = new ArrayList<>();
+        for (Animal animal : animalLinkedList){
+            if(animal.isAnimalDead()){
+                animal.removeObserver(this);
+                animals.get(animal.getPosition()).remove(animal);
+                deadAnimals.add(animal);
+            }
+        }
+        for(Animal animal: deadAnimals){
+            animalLinkedList.remove(animal);
+            this.animalsQuantity --;
+        }
+    }
 
     public static class EnergyComp implements Comparator<Animal>{
         @Override
@@ -140,42 +198,33 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
     // putting start animals (animals have to be on different spots)
     // used also when copies are made in magic version of evolution
 
-    public boolean placeAnimal(Animal animal) {
+    public void placeAnimals(int animalsQuantity){
+        Animal animal;
+        for(int i = 0; i < animalsQuantity; i++){
+            animal = new Animal(this);
+            place(animal);
+            this.animalsQuantity ++;
+        }
+    }
+
+
+    public void place(Animal animal) {
         Vector2d location = new Vector2d((int) (Math.random() * this.width), (int) (Math.random() * this.height));
         int counter = 0;
-        while(isOccupied(location)) {
+        while(isPlantThere(location) || isAnimalThere(location)) {
             counter ++;
             location = new Vector2d((int) (Math.random() * this.width), (int) (Math.random() * this.height));
-            if(counter == (width*height/2)){
+            if(counter == (width * height / 2)){
                 throw new IllegalArgumentException("Can't place animal on" + location);
             }
         }
         animal.setPosition(location);
         this.animals.computeIfAbsent(location, k -> new LinkedList<Animal>());
         this.animals.get(location).add(animal);
-        animal.addObserver(this);
-        return true;
-    }
-
-    //putting baby animal on the map
-
-    public void placeBaby(Animal animal){
-        Vector2d location = animal.getPosition();
-        this.animals.get(location).add(animal);
+        animalLinkedList.add(animal);
         animal.addObserver(this);
     }
 
-
-    public Vector2d jungleResearch(){
-        for(int i = jungleDownCorner.x; i < jungleUpCorner.x; i++){
-            for(int j = jungleDownCorner.y; j < jungleUpCorner.y; j++){
-                if(!isOccupied(new Vector2d(i, j))){
-                    return new Vector2d(i, j);
-                }
-            }
-        }
-        return null;
-    }
 
     // all the stuff with elements on the map
 
@@ -188,20 +237,17 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
     }
 
     public boolean isCrowded(Vector2d position) {
-        return animals.get(position).size() > 1;
+        return animals.get(position) != null && animals.get(position).size() > 1;
     }
 
     public boolean canMoveTo(Vector2d pos) {
-        return pos.precedes(rightUpCorner);
+        return (pos.precedes(rightUpCorner) && pos.follows(new Vector2d(0, 0)));
     }
 
     public boolean isAnimalThere(Vector2d position){
-        return animals.get(position) != null;
+        return animals.get(position) != null && animals.get(position).size() > 0 ;
     }
 
-    public boolean isOccupied(Vector2d pos){
-        return (isAnimalThere(pos) || isPlantThere(pos));
-    }
 
     public boolean isPlantThere(Vector2d position){
         return plants.get(position) != null;
@@ -212,6 +258,19 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
             return animals.get(position);
         return plants.get(position);
     }
+
+    public int getHeight(){
+        return this.height;
+    }
+
+    public int getWidth(){
+        return this.width;
+    }
+
+    public ImageLoader getImageLoader(){
+        return this.imageLoader;
+    }
+
 
     // just giving back corners of the map
 

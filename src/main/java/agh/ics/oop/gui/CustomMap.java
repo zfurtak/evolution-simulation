@@ -4,25 +4,26 @@ import agh.ics.oop.AbstractWorldMap;
 import agh.ics.oop.Vector2d;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+
 
 
 import java.io.FileNotFoundException;
 
-import static javax.swing.text.StyleConstants.Background;
+
 
 public class CustomMap {
     GridPane grid = new GridPane();
-    int size = 30;
+    int size;
     AbstractWorldMap map;
     Vector2d rightUpCorner;
 
     public CustomMap(AbstractWorldMap mapValue) throws FileNotFoundException {
         this.map = mapValue;
         rightUpCorner = map.findingUpperCorner();
+        int maxi = Math.max(map.getHeight(), map.getWidth());
+        this.size = 300 / maxi;
         makeGrid();
     }
 
@@ -31,7 +32,7 @@ public class CustomMap {
     }
 
 
-    public void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
+    public void positionChanged() {
         Platform.runLater(() -> {
             try {
                 makeGrid();
@@ -70,6 +71,8 @@ public class CustomMap {
             GridPane.setHalignment(label3, HPos.CENTER);
         }
 
+
+
         for (int i = 0; i <= rightUpCorner.x; i++) {
             for (int j = 0; j <= rightUpCorner.y; j++) {
                 Vector2d pos = new Vector2d(i, j);
@@ -77,12 +80,12 @@ public class CustomMap {
 
                 if (map.objectAt(pos) != null && map.getAnimals().get(pos) != null && !map.getAnimals().get(pos).isEmpty()) {
                     map.getAnimals().get(pos).sort(new AbstractWorldMap.EnergyComp());
-                    guiBox = new GuiElementBox(map.getAnimals().get(pos).get(0));
+                    guiBox = new GuiElementBox(map.getAnimals().get(pos).get(0), this.size);
                     grid.add(guiBox.getBox(), pos.x + 1,
                             rightUpCorner.y - pos.y + 1, 1, 1);
 
                 }else if(map.isPlantThere(pos)){
-                    guiBox = new GuiElementBox(map.getPlant(pos));
+                    guiBox = new GuiElementBox(map.getPlant(pos), this.size);
                     grid.add(guiBox.getBox(), pos.x + 1,
                             rightUpCorner.y - pos.y + 1, 1, 1);
 

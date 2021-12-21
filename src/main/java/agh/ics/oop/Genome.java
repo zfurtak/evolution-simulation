@@ -30,6 +30,7 @@ public class Genome {
         }else{
             fillProperSide(dad, mum, dadEnergy, parentsEnergy, side);
         }
+        Arrays.sort(this.genomeArray);
     }
 
     private void fillProperSide(Animal betterParent, Animal worseParent, int betterEnergy, int wholeEnergy, int option){

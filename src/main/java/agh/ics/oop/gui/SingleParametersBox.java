@@ -7,12 +7,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 public class SingleParametersBox {
-    VBox vbox;
+    private final VBox vbox;
+    TextField textField;
 
     public SingleParametersBox(String labelTitle, String value){
         Label label = new Label(labelTitle);
         label.setFont(new Font("Arial", 16));
-        TextField textField = new TextField(value);
+        textField = new TextField(value);
         textField.setMaxWidth(300);
         vbox = new VBox(5);
         vbox.getChildren().addAll(label, textField);
@@ -21,5 +22,9 @@ public class SingleParametersBox {
 
     public VBox getSingleBox(){
         return vbox;
+    }
+
+    public String getValue(){
+        return textField.getText();
     }
 }

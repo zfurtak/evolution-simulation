@@ -16,39 +16,63 @@ import java.io.FileNotFoundException;
 
 public class ParametersBox {
     VBox vbox;
+    SingleParametersBox height = new SingleParametersBox("Height", "10");
+    SingleParametersBox width = new SingleParametersBox("Width", "10");
+    SingleParametersBox animalsQuantity = new SingleParametersBox("How many animals do you want on the beginning", "20");
+    SingleParametersBox startEnergy = new SingleParametersBox("Start amount of energy for each animal", "50");
+    SingleParametersBox plantEnergy = new SingleParametersBox("Amount of energy given by a plant", "10");
+    SingleParametersBox moveEnergy = new SingleParametersBox("Amount of energy taken after a move", "1");
+    SingleParametersBox jungleRatio = new SingleParametersBox("Part of the map taken by a jungle", "0.2");
+
 
     public ParametersBox() {
         Label title = new Label("Enter parameters, por favor");
         title.setFont(new Font("Arial", 24));
         VBox.setMargin(title, new Insets(0, 0, 30, 0));
 
-        VBox height = new SingleParametersBox("Height", "10").getSingleBox();
-
-        VBox width = new SingleParametersBox("Width", "10").getSingleBox();
-
-        VBox animalsQuantity = new SingleParametersBox("How many animals do you want on the beginning", "5").getSingleBox();
-
-        VBox startEnergy = new SingleParametersBox("Start amount of energy for each animal", "5").getSingleBox();
-
-        VBox plantEnergy = new SingleParametersBox("Amount of energy given by a plant", "10").getSingleBox();
-
-        VBox moveEnergy = new SingleParametersBox("Amount of energy taken after a move", "1").getSingleBox();
-
-        VBox jungleRatio = new SingleParametersBox("Part of the map taken by a jungle", "0.2").getSingleBox();
-
         CheckBox notExtendedMap = new CheckBox("Magic evolution for map with bounds");
-        CheckBox ExtendedMap= new CheckBox("Magic evolution for map without bounds");
+        CheckBox ExtendedMap = new CheckBox("Magic evolution for map without bounds");
 
 
         vbox = new VBox(10);
-        vbox.getChildren().addAll(title, height ,width, animalsQuantity, startEnergy,
-                plantEnergy, moveEnergy, jungleRatio, notExtendedMap, ExtendedMap);
-        //vbox.setPrefWidth(100);
+        vbox.getChildren().addAll(title, height.getSingleBox(), width.getSingleBox(), animalsQuantity.getSingleBox(),
+                startEnergy.getSingleBox(), plantEnergy.getSingleBox(), moveEnergy.getSingleBox(), jungleRatio.getSingleBox(),
+                notExtendedMap, ExtendedMap);
         vbox.setAlignment(Pos.CENTER);
     }
 
     public VBox getParameters(){
         return vbox;
     }
+
+    public int getHeight(){
+        return Integer.parseInt(height.getValue());
+    }
+
+    public int getWidth(){
+        return Integer.parseInt(width.getValue());
+    }
+
+    public int getAnimalsQuantity(){
+        return Integer.parseInt(animalsQuantity.getValue());
+    }
+
+    public int getStartEnergy(){
+        return Integer.parseInt(startEnergy.getValue());
+    }
+
+    public int getPlantEnergy(){
+        return Integer.parseInt(plantEnergy.getValue());
+    }
+
+    public int getMoveEnergy(){
+        return Integer.parseInt(moveEnergy.getValue());
+    }
+
+    public double getJungleRation(){
+        return Double.parseDouble(jungleRatio.getValue());
+    }
+
+
 }
 

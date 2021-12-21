@@ -15,16 +15,9 @@ public class NotExtendedMap extends AbstractWorldMap{
         this.moveEnergy = moveEnergyVal;
         this.jungleDownCorner = new Vector2d((int) (width*(1-jungleRatio)/2), (int) (height*(1-jungleRatio)/2));
         this.jungleUpCorner = new Vector2d((int) (width*(1+jungleRatio)/2), (int) (height*(1+jungleRatio)/2));
-        placePlants();
+        this.animalsQuantity = 0;
+        this.plantsQuantity = 0;
 
     }
-
-    @Override
-    public boolean isOccupied(Vector2d position) {
-        return false;
-    }
-
-    // placing plants on the map
-
 
 }

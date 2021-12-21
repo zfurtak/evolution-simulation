@@ -1,5 +1,8 @@
 package agh.ics.oop;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,11 +11,7 @@ public abstract class AbstractWorldMapElement implements IMapElement{
     protected List<IPositionChangeObserver> observers = new ArrayList<>();
 
 
-    public boolean isAt(Vector2d pos) {
-        return this.position.equals(pos);
-    }
-
-    abstract public String getPath();
+    abstract public Image getImage();
 
 
     @Override

@@ -1,41 +1,38 @@
 package agh.ics.oop;
 
-import java.util.ArrayList;
+import agh.ics.oop.gui.App;
+import agh.ics.oop.gui.ParametersBox;
+
+import static java.lang.System.out;
+
 
 public class SimulationEngine implements Runnable{
-    private MoveDirection[] moves;
-    private final ArrayList<Animal> animals;
     private final AbstractWorldMap map;
-    private final int moveDelay;
+    private App gui;
+    private ParametersBox parametersBox;
 
-    public SimulationEngine(AbstractWorldMap map, int animalQuantity, int moveDelay){
-        this.animals = new ArrayList<>();
+    public SimulationEngine(AbstractWorldMap map, App guiDude){
         this.map = map;
-        this.moveDelay = moveDelay;
-        for (int i = 0; i < animalQuantity; i++){
-            Animal animal = new Animal(map);
-            this.animals.add(animal);
-            map.placeAnimal(animal);
-        }
+        this.gui = guiDude;
+        this.parametersBox = guiDude.getParametersBox();
+        this.map.placeAnimals(parametersBox.getAnimalsQuantity());
     }
 
-    public void getMoves(MoveDirection[] newMoves){
-        this.moves = newMoves;
-    }
 
     @Override
     public void run() {
-        int movesLength = this.moves.length;
-        int animalsSize = this.animals.size();
-        for (int i = 0; i < movesLength; i++){
-            int animalID = i % animalsSize;
-            Animal animal = this.animals.get(animalID);
-            animal.move();
+        while(true){
             try {
-                Thread.sleep(this.moveDelay);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.sleep(200);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
             }
+            this.gui.drawNewMap(map);
+            map.removeDeadAnimals();
+            map.moveAnimals();
+            map.eatDinner();
+            map.makeLove();
+            map.placePlants();
         }
     }
 }
