@@ -1,11 +1,11 @@
 package agh.ics.oop.gui;
 
 import agh.ics.oop.AbstractWorldMap;
+import agh.ics.oop.SimulationEngine;
 import javafx.application.Platform;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -13,7 +13,7 @@ import java.io.FileNotFoundException;
 
 public class SideBox {
     VBox mainBox;
-    TopBox topBox;
+    public TopBox topBox;
     LineChart<Number, Number> chart;
     XYChart.Series<Number, Number> animals;
     XYChart.Series<Number, Number> plants;
@@ -21,16 +21,21 @@ public class SideBox {
     XYChart.Series<Number, Number> avgLifeTime;
     XYChart.Series<Number, Number> avgChildrenNo;
     AbstractWorldMap map;
-    int daysNo;
 
-    public SideBox(AbstractWorldMap map, Thread thread, int counter) throws FileNotFoundException {
+    public SideBox(AbstractWorldMap map) throws FileNotFoundException {
+
         topBox = new TopBox(map);
         this.map = map;
-        this.daysNo = counter;
+
         HBox box = topBox.getTopBox();
         VBox chart = new VBox(getChart(0));
+        SimulationEngine engine = new SimulationEngine(map, this);
+        Thread thread = new Thread(engine);
         HBox downBox = new Buttons(map, thread, true).getButtons();
         mainBox = new VBox(box, chart, downBox);
+
+        thread.start();
+
     }
 
     public VBox getSideBox(){

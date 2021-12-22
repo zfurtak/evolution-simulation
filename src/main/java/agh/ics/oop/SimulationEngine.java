@@ -1,28 +1,21 @@
 package agh.ics.oop;
 
-import agh.ics.oop.gui.App;
-import agh.ics.oop.gui.ParametersBox;
+import agh.ics.oop.gui.CustomMap;
+import agh.ics.oop.gui.SideBox;
 
-import static java.lang.System.out;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Map;
 
 
 public class SimulationEngine implements Runnable{
     private final AbstractWorldMap map;
-    private App gui;
-    private ParametersBox parametersBox;
     private int daysCounter;
+    private final SideBox side;
 
-
-
-    public SimulationEngine(AbstractWorldMap map, App guiDude){
+    public SimulationEngine(AbstractWorldMap map, SideBox sideBox) {
         this.map = map;
-        this.gui = guiDude;
-        this.parametersBox = guiDude.getParametersBox();
-        this.map.placeAnimals(parametersBox.getAnimalsQuantity());
-        if(map instanceof NotExtendedMap)
-            this.daysCounter = gui.counter1;
-        else
-            this.daysCounter = gui.counter2;
+        this.side = sideBox;
     }
 
 
@@ -34,13 +27,22 @@ public class SimulationEngine implements Runnable{
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
-            this.gui.drawNewMap(map);
-
+            this.drawNewMap();
             map.removeDeadAnimals(daysCounter);
             map.moveAnimals();
             map.eatDinner();
             map.makeLove(daysCounter);
             map.placePlants();
         }
+    }
+    public void drawNewMap(){
+        map.avgEnergy = map.getAnimalLinkedList().stream().mapToInt(Animal :: getEnergy).sum() / map.animalsQuantity;
+        map.avgLifeTime = ((map.deadAnimalsNo-map.newDeathsNo) * map.avgLifeTime + map.newLifeTimeData) / Math.max(map.deadAnimalsNo, 1);
+        map.avgChildrenNo = map.getAnimalLinkedList().stream().mapToInt(Animal :: getChildrenNo).sum() / map.animalsQuantity;
+        map.mostCommonGenome = Collections.max(map.genomes.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
+        this.side.topBox.customMap.positionChanged();
+        this.side.getChart(this.daysCounter);
+        this.daysCounter ++;
+
     }
 }

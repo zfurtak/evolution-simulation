@@ -18,6 +18,7 @@ public class Animal extends AbstractWorldMapElement {
         this.energy = map.startEnergy;
         this.genome = new Genome();
         this.birthday = 0;
+        uploadGenomes();
     }
 
     public Animal(AbstractWorldMap map, int energyValue, Animal mum, Animal dad, int birthday) {
@@ -26,6 +27,7 @@ public class Animal extends AbstractWorldMapElement {
         this.energy = energyValue;
         this.genome = new Genome(mum, dad);
         this.birthday = birthday;
+        uploadGenomes();
     }
 
     public void setPosition(Vector2d pos) {
@@ -100,6 +102,16 @@ public class Animal extends AbstractWorldMapElement {
         this.energy -= map.moveEnergy;
     }
 
+    public void uploadGenomes(){
+        if(map.genomes.get(this.genome) == null){
+            map.genomes.put(this.genome, 1);
+        }else{
+            int value = map.genomes.get(this.genome);
+            map.genomes.remove(this.genome);
+            map.genomes.put(this.genome, value + 1);
+        }
+    }
+
     private void turn(int x) {
         for (int i = 0; i < x; i++) {
             this.orient = this.orient.next();
@@ -117,6 +129,10 @@ public class Animal extends AbstractWorldMapElement {
 
     public int getGene(int i) {
         return this.genome.genomeArray[i];
+    }
+
+    public Genome getGenome(){
+        return this.genome;
     }
 
     @Override

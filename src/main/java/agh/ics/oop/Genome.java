@@ -71,4 +71,12 @@ public class Genome {
         return this.genomeArray[temp];
     }
 
+    public String toString(){
+        StringBuilder result = new StringBuilder();
+        for(int i = 0; i < size; i++){
+            result.append(" ");
+            result.append(genomeArray[i]);
+        }
+        return result.toString();
+    }
 }

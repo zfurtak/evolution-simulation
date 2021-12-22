@@ -12,6 +12,7 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
     protected LinkedHashMap<Vector2d, LinkedList<Animal>> animals = new LinkedHashMap<>();
     protected LinkedHashMap<Vector2d, Plant> plants = new LinkedHashMap<>();
     protected LinkedList<Animal> animalLinkedList = new LinkedList<>();
+    public LinkedHashMap<Genome, Integer> genomes = new LinkedHashMap<>();
     protected Vector2d rightUpCorner;
     protected int height;
     protected int width;
@@ -29,8 +30,9 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
     public int avgChildrenNo;
     public int newDeathsNo;
     public int deadAnimalsNo = 0;
-    public int avgLifeTime = 0;
+    public int avgLifeTime = 1;
     public int newLifeTimeData;
+    public Genome mostCommonGenome;
 
 
     // placing plants on the map
@@ -188,10 +190,10 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
                 animal.removeObserver(this);
                 animals.get(animal.getPosition()).remove(animal);
                 deadAnimals.add(animal);
+                uploadGenomes(animal);
                 this.deadAnimalsNo ++;
                 this.newDeathsNo ++;
                 newLifeTimeData += days - animal.birthday;
-
             }
         }
         for(Animal animal: deadAnimals){
@@ -199,6 +201,7 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
             this.animalsQuantity --;
         }
     }
+
 
     public static class EnergyComp implements Comparator<Animal>{
         @Override
@@ -269,6 +272,16 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
         if(animals.get(position) != null)
             return animals.get(position);
         return plants.get(position);
+    }
+
+    public void uploadGenomes(Animal animal){
+        if(this.genomes.get(animal.getGenome()) == 1){
+            this.genomes.remove(animal.getGenome());
+        }else if (this.genomes.get(animal.getGenome()) > 1){
+            int value = this.genomes.get(animal.getGenome());
+            this.genomes.remove(animal.getGenome());
+            this.genomes.put(animal.getGenome(), value - 1);
+        }
     }
 
     public int getHeight(){

@@ -9,7 +9,7 @@ import java.io.FileNotFoundException;
 
 public class TopBox {
     HBox mainBox;
-    CustomMap customMap;
+    public CustomMap customMap;
     public TopBox(AbstractWorldMap map) throws FileNotFoundException {
         VBox stats = new Stats(map).getStats();
         customMap = new CustomMap(map);

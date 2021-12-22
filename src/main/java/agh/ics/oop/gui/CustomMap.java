@@ -88,7 +88,6 @@ public class CustomMap {
                     guiBox = new GuiElementBox(map.getPlant(pos), this.size);
                     grid.add(guiBox.getBox(), pos.x + 1,
                             rightUpCorner.y - pos.y + 1, 1, 1);
-
                 }
             }
         }
