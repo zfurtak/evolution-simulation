@@ -14,8 +14,8 @@ public class Stats {
         title.setFont(new Font("Arial", 18));
         VBox.setMargin(title, new Insets(10, 0, 10, 0));
 
-        Text stata_1 = new Text("Quantity of animals on the map: "+map.animalsQuantity);
-        Text stata_2 = new Text("Quantity of plants on the map: "+map.plantsQuantity); //
+        Text stata_1 = new Text("Most common genome: ");
+        Text stata_2 = new Text("tratatatatatatatata"); //
         Text stata_3 = new Text("statatatata3");
         vbox = new VBox(10);
         vbox.getChildren().addAll(title, stata_1, stata_2, stata_3);

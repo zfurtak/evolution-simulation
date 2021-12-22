@@ -14,12 +14,21 @@ import java.io.FileNotFoundException;
 public class SideBox {
     VBox mainBox;
     TopBox topBox;
+    LineChart<Number, Number> chart;
+    XYChart.Series<Number, Number> animals;
+    XYChart.Series<Number, Number> plants;
+    XYChart.Series<Number, Number> avgEnergy;
+    XYChart.Series<Number, Number> avgLifeTime;
+    XYChart.Series<Number, Number> avgChildrenNo;
+    AbstractWorldMap map;
+    int daysNo;
 
-    public SideBox(AbstractWorldMap map, Thread thread) throws FileNotFoundException {
+    public SideBox(AbstractWorldMap map, Thread thread, int counter) throws FileNotFoundException {
         topBox = new TopBox(map);
+        this.map = map;
+        this.daysNo = counter;
         HBox box = topBox.getTopBox();
-        VBox chart = new VBox(getChart());
-        //VBox chart = new VBox(new Label("tu bedzie wykres"));
+        VBox chart = new VBox(getChart(0));
         HBox downBox = new Buttons(map, thread, true).getButtons();
         mainBox = new VBox(box, chart, downBox);
     }
@@ -28,24 +37,33 @@ public class SideBox {
         return mainBox;
     }
 
-    public LineChart getChart(){
-        LineChart<Number, Number> chart = new LineChart<>(new NumberAxis(), new NumberAxis());
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
-        chart.getData().add(series);
-
-        new Thread(() -> {
-            try {
-                Thread.sleep(5000);
-                for (int i = 0; i < 15; i++) {
-                    int finalI = i;
-                    Platform.runLater(() -> series.getData().add(new XYChart.Data<>(1 + finalI, 1 + finalI)));
-                    Thread.sleep(1000);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
-
+    public LineChart getChart(int days) {
+        if (this.chart == null) {
+            this.chart = new LineChart<>(new NumberAxis(), new NumberAxis());
+            this.chart.setCreateSymbols(false);
+            animals = new XYChart.Series<>();
+            animals.setName("Number of animals");
+            plants = new XYChart.Series<>();
+            plants.setName("Number of plants");
+            avgEnergy = new XYChart.Series<>();
+            avgEnergy.setName("Average energy");
+            avgLifeTime = new XYChart.Series<>();
+            avgLifeTime.setName("Average living time");
+            avgChildrenNo = new XYChart.Series<>();
+            avgChildrenNo.setName("Average number of children");
+            this.chart.getData().add(animals);
+            this.chart.getData().add(plants);
+            this.chart.getData().add(avgEnergy);
+            this.chart.getData().add(avgLifeTime);
+            this.chart.getData().add(avgChildrenNo);
+            this.chart.getLegendSide();
+        } else {
+            Platform.runLater(() -> animals.getData().add(new XYChart.Data<>(days, map.animalsQuantity)));
+            Platform.runLater(() -> plants.getData().add(new XYChart.Data<>(days, map.plantsQuantity)));
+            Platform.runLater(() -> avgEnergy.getData().add(new XYChart.Data<>(days, map.avgEnergy)));
+            Platform.runLater(() -> avgLifeTime.getData().add(new XYChart.Data<>(days, map.avgLifeTime)));
+            Platform.runLater(() -> avgChildrenNo.getData().add(new XYChart.Data<>(days, map.avgChildrenNo)));
+        }
         return chart;
     }
 }

@@ -1,15 +1,15 @@
 package agh.ics.oop;
 
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
-import static java.lang.System.out;
 
 public class Animal extends AbstractWorldMapElement {
     private MapDirection orient = MapDirection.NORTH;
     private final AbstractWorldMap map;
     private int energy;
     private Genome genome;
+    private int childrenNo = 0;
+    public int birthday;
 
 
     public Animal(AbstractWorldMap map) {
@@ -17,13 +17,15 @@ public class Animal extends AbstractWorldMapElement {
         this.map = map;
         this.energy = map.startEnergy;
         this.genome = new Genome();
+        this.birthday = 0;
     }
 
-    public Animal(AbstractWorldMap map, int energyValue, Animal mum, Animal dad) {
+    public Animal(AbstractWorldMap map, int energyValue, Animal mum, Animal dad, int birthday) {
         this.position = mum.position;
         this.map = map;
         this.energy = energyValue;
         this.genome = new Genome(mum, dad);
+        this.birthday = birthday;
     }
 
     public void setPosition(Vector2d pos) {
@@ -90,6 +92,8 @@ public class Animal extends AbstractWorldMapElement {
     public void reproduce(Animal partner) {
         this.energy -= this.energy * 0.25;
         partner.energy -= partner.energy * 0.25;
+        this.childrenNo ++;
+        partner.childrenNo ++;
     }
 
     public void exercise() {
@@ -105,6 +109,10 @@ public class Animal extends AbstractWorldMapElement {
 
     public int getEnergy() {
         return this.energy;
+    }
+
+    public int getChildrenNo(){
+        return this.childrenNo;
     }
 
     public int getGene(int i) {

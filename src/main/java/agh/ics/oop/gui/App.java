@@ -2,9 +2,11 @@ package agh.ics.oop.gui;
 
 import agh.ics.oop.*;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import java.io.FileNotFoundException;
@@ -18,6 +20,8 @@ public class App extends Application {
     SideBox rightSide;
     GridPane mainView = new GridPane();
     ParametersBox parametersBox = new ParametersBox();
+    public int counter1 = 0;
+    public int counter2 = 0;
 
 
     public void init() throws Exception {
@@ -37,10 +41,18 @@ public class App extends Application {
     }
 
     public void drawNewMap(AbstractWorldMap map){
-        if(map.equals(map1))
+        map.avgEnergy = map.getAnimalLinkedList().stream().mapToInt(Animal :: getEnergy).sum() / map.animalsQuantity;
+        map.avgChildrenNo = map.getAnimalLinkedList().stream().mapToInt(Animal :: getChildrenNo).sum() / map.animalsQuantity;
+        map.avgLifeTime = ((map.deadAnimalsNo-map.newDeathsNo) * map.avgLifeTime + map.newLifeTimeData) / Math.max(map.deadAnimalsNo, 1);
+        if(map.equals(map1)) {
             this.leftSide.topBox.customMap.positionChanged();
+            this.leftSide.getChart(this.counter1);
+            counter1 ++;
+        }
         else{
             this.rightSide.topBox.customMap.positionChanged();
+            this.rightSide.getChart(this.counter2);
+            counter2 ++;
         }
     }
 
@@ -63,15 +75,17 @@ public class App extends Application {
             Thread thread1 = new Thread(engine1);
             Thread thread2 = new Thread(engine2);
             try {
-                leftSide = new SideBox(map1, thread1);
-                rightSide = new SideBox(map2, thread2);
+                leftSide = new SideBox(map1, thread1, this.counter1);
+                rightSide = new SideBox(map2, thread2, this.counter2);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
             HBox secondBox = new HBox(10);
             secondBox.getChildren().addAll(leftSide.getSideBox(), rightSide.getSideBox());
             mainView.getChildren().clear();
+
             mainView.add(secondBox, 0, 0, 1, 1);
+
             mainView.setAlignment(Pos.CENTER);
             thread1.start();
             thread2.start();

@@ -25,6 +25,12 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
     protected ImageLoader imageLoader = new ImageLoader();
     public int animalsQuantity;
     public int plantsQuantity;
+    public int avgEnergy;
+    public int avgChildrenNo;
+    public int newDeathsNo;
+    public int deadAnimalsNo = 0;
+    public int avgLifeTime = 0;
+    public int newLifeTimeData;
 
 
     // placing plants on the map
@@ -139,24 +145,24 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
 
     //reproducing
 
-    public void makeLove(){
+    public void makeLove(int birthday){
         Vector2d currentPosition;
         for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
                 currentPosition = new Vector2d(i, j);
                 if(isCrowded(currentPosition)){
-                    makeLittleAnimal(currentPosition);
+                    makeLittleAnimal(currentPosition, birthday);
                 }
             }
         }
     }
 
-    public void makeLittleAnimal(Vector2d position){
+    public void makeLittleAnimal(Vector2d position, int birthday){
         LinkedList<Animal> animalsList = animals.get(position);
         animalsList.sort(new EnergyComp());
         if (animalsList.get(1).getEnergy() >= minReproduceEnergy) {
             int childEnergy = ((animalsList.get(0).getEnergy() + animalsList.get(1).getEnergy()) / 4);
-            Animal baby = new Animal(this, childEnergy, animalsList.get(0), animalsList.get(1));
+            Animal baby = new Animal(this, childEnergy, animalsList.get(0), animalsList.get(1), birthday);
             baby.position = position;
             animalsList.get(0).reproduce(animalsList.get(1));
             placeBaby(baby);
@@ -173,13 +179,19 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
 
     //removing dead animals
 
-    public void removeDeadAnimals(){
+    public void removeDeadAnimals(int days){
         ArrayList<Animal> deadAnimals = new ArrayList<>();
+        newDeathsNo = 0;
+        newLifeTimeData = 0;
         for (Animal animal : animalLinkedList){
             if(animal.isAnimalDead()){
                 animal.removeObserver(this);
                 animals.get(animal.getPosition()).remove(animal);
                 deadAnimals.add(animal);
+                this.deadAnimalsNo ++;
+                this.newDeathsNo ++;
+                newLifeTimeData += days - animal.birthday;
+
             }
         }
         for(Animal animal: deadAnimals){
@@ -271,6 +283,9 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
         return this.imageLoader;
     }
 
+    public LinkedList<Animal> getAnimalLinkedList() {
+        return animalLinkedList;
+    }
 
     // just giving back corners of the map
 

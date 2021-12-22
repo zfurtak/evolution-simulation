@@ -59,7 +59,7 @@ public class Genome {
 
     public void randomGenome(){
         for(int i = 0; i < size; i++){
-            this.genomeArray[i] = (int) (Math.random() * (genesQuantity));
+            this.genomeArray[i] = (int) (Math.random() * (genesQuantity+1));
         }
         Arrays.sort(this.genomeArray);
     }

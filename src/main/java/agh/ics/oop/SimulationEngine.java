@@ -10,12 +10,19 @@ public class SimulationEngine implements Runnable{
     private final AbstractWorldMap map;
     private App gui;
     private ParametersBox parametersBox;
+    private int daysCounter;
+
+
 
     public SimulationEngine(AbstractWorldMap map, App guiDude){
         this.map = map;
         this.gui = guiDude;
         this.parametersBox = guiDude.getParametersBox();
         this.map.placeAnimals(parametersBox.getAnimalsQuantity());
+        if(map instanceof NotExtendedMap)
+            this.daysCounter = gui.counter1;
+        else
+            this.daysCounter = gui.counter2;
     }
 
 
@@ -28,10 +35,11 @@ public class SimulationEngine implements Runnable{
                 ex.printStackTrace();
             }
             this.gui.drawNewMap(map);
-            map.removeDeadAnimals();
+
+            map.removeDeadAnimals(daysCounter);
             map.moveAnimals();
             map.eatDinner();
-            map.makeLove();
+            map.makeLove(daysCounter);
             map.placePlants();
         }
     }
