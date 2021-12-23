@@ -75,10 +75,6 @@ public class Genome {
         return this.genomeArray[temp];
     }
 
-    public int[] getGenomeArray(){
-        return this.genomeArray;
-    }
-
     public String toString(){
         StringBuilder result = new StringBuilder();
         for(int i = 0; i < size; i++){
@@ -86,5 +82,20 @@ public class Genome {
             result.append(genomeArray[i]);
         }
         return result.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Genome genome = (Genome) o;
+        return Arrays.equals(genomeArray, genome.genomeArray);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(size, genesQuantity);
+        result = 31 * result + Arrays.hashCode(genomeArray);
+        return result;
     }
 }
