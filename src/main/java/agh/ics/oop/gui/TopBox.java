@@ -9,13 +9,16 @@ import java.io.FileNotFoundException;
 
 public class TopBox {
     HBox mainBox;
+    public Stats stats;
+
     public CustomMap customMap;
     public TopBox(AbstractWorldMap map) throws FileNotFoundException {
-        VBox stats = new Stats(map).getStats();
-        customMap = new CustomMap(map);
+        stats = new Stats();
+        VBox statsBox = stats.getStats();
+        customMap = new CustomMap(map, stats);
         VBox mapBox = customMap.getCustomMap();
         mainBox = new HBox(30);
-        mainBox.getChildren().addAll(stats, mapBox);
+        mainBox.getChildren().addAll(statsBox, mapBox);
         mapBox.setAlignment(Pos.CENTER_RIGHT);
     }
 

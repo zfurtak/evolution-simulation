@@ -13,7 +13,7 @@ import java.io.FileNotFoundException;
 public class App extends Application {
     SideBox leftSide;
     SideBox rightSide;
-    HBox mainView = new HBox();
+    HBox mainView = new HBox(50);
     ParametersBox parametersBox = new ParametersBox();
 
 

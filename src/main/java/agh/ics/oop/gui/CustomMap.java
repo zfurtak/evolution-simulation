@@ -18,12 +18,14 @@ public class CustomMap {
     int size;
     AbstractWorldMap map;
     Vector2d rightUpCorner;
+    Stats stats;
 
-    public CustomMap(AbstractWorldMap mapValue) throws FileNotFoundException {
+    public CustomMap(AbstractWorldMap mapValue, Stats stats) throws FileNotFoundException {
         this.map = mapValue;
         rightUpCorner = map.findingUpperCorner();
         int maxi = Math.max(map.getHeight(), map.getWidth());
         this.size = 300 / maxi;
+        this.stats = stats;
         makeGrid();
     }
 
@@ -80,12 +82,12 @@ public class CustomMap {
 
                 if (map.objectAt(pos) != null && map.getAnimals().get(pos) != null && !map.getAnimals().get(pos).isEmpty()) {
                     map.getAnimals().get(pos).sort(new AbstractWorldMap.EnergyComp());
-                    guiBox = new GuiElementBox(map.getAnimals().get(pos).get(0), this.size);
+                    guiBox = new GuiElementBox(map.getAnimals().get(pos).get(0), this.size, this.stats);
                     grid.add(guiBox.getBox(), pos.x + 1,
                             rightUpCorner.y - pos.y + 1, 1, 1);
 
                 }else if(map.isPlantThere(pos)){
-                    guiBox = new GuiElementBox(map.getPlant(pos), this.size);
+                    guiBox = new GuiElementBox(map.getPlant(pos), this.size, this.stats);
                     grid.add(guiBox.getBox(), pos.x + 1,
                             rightUpCorner.y - pos.y + 1, 1, 1);
                 }
