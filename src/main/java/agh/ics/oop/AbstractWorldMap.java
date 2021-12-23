@@ -21,6 +21,7 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
     protected int minReproduceEnergy;
     protected int plantEnergy;
     protected int moveEnergy;
+    protected boolean isMagic;
     protected Vector2d jungleDownCorner;
     protected Vector2d jungleUpCorner;
     protected ImageLoader imageLoader = new ImageLoader();
@@ -36,7 +37,6 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
 
 
     // placing plants on the map
-
 
     public void placePlants() {
         int x, y;
@@ -84,6 +84,8 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
         plants.put(plantPosition, steppePlant);
         plantsQuantity++;
     }
+
+// searching for a place to grow in the jungle
 
     public Vector2d jungleResearch(){
         for(int i = jungleDownCorner.x; i <= jungleUpCorner.x; i++){
@@ -202,6 +204,7 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
         }
     }
 
+    //comparator based on animals' energy
 
     public static class EnergyComp implements Comparator<Animal>{
         @Override
@@ -211,7 +214,6 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
     }
 
     // putting start animals (animals have to be on different spots)
-    // used also when copies are made in magic version of evolution
 
     public void placeAnimals(int animalsQuantity){
         Animal animal;
@@ -222,6 +224,20 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
         }
     }
 
+    //placing animals during magic mode
+
+    public void placeMagicAnimals(int birthday){
+        Animal animal;
+        LinkedList<Animal> patterns = new LinkedList<Animal>(animalLinkedList);
+        for(Animal animalParent : patterns){
+            animal = new Animal(this, birthday, animalParent);
+            place(animal);
+            this.animalsQuantity ++;
+        }
+    }
+
+    // putting one animal in the map
+    // used also when copies are made in magic version of evolution
 
     public void place(Animal animal) {
         Vector2d location = new Vector2d((int) (Math.random() * this.width), (int) (Math.random() * this.height));
@@ -240,8 +256,19 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
         animal.addObserver(this);
     }
 
+    //uploading genome when animals are being removed
 
-    // all the stuff with elements on the map
+    public void uploadGenomes(Animal animal){
+        if(this.genomes.get(animal.getGenome()) == 1){
+            this.genomes.remove(animal.getGenome());
+        }else if (this.genomes.get(animal.getGenome()) > 1){
+            int value = this.genomes.get(animal.getGenome());
+            this.genomes.remove(animal.getGenome());
+            this.genomes.put(animal.getGenome(), value - 1);
+        }
+    }
+
+    // all the stuff with elements on the map; getters, setters, checks
 
     public LinkedHashMap<Vector2d, LinkedList<Animal>> getAnimals() {
         return this.animals;
@@ -263,7 +290,6 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
         return animals.get(position) != null && animals.get(position).size() > 0 ;
     }
 
-
     public boolean isPlantThere(Vector2d position){
         return plants.get(position) != null;
     }
@@ -274,14 +300,8 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
         return plants.get(position);
     }
 
-    public void uploadGenomes(Animal animal){
-        if(this.genomes.get(animal.getGenome()) == 1){
-            this.genomes.remove(animal.getGenome());
-        }else if (this.genomes.get(animal.getGenome()) > 1){
-            int value = this.genomes.get(animal.getGenome());
-            this.genomes.remove(animal.getGenome());
-            this.genomes.put(animal.getGenome(), value - 1);
-        }
+    public void setMagic(boolean x){
+        this.isMagic = x;
     }
 
     public int getHeight(){
@@ -299,8 +319,6 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
     public LinkedList<Animal> getAnimalLinkedList() {
         return animalLinkedList;
     }
-
-    // just giving back corners of the map
 
     public Vector2d findingUpperCorner() {
         return rightUpCorner;

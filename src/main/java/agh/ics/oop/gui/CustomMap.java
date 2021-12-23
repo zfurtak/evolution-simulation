@@ -33,6 +33,7 @@ public class CustomMap {
         return new VBox(grid);
     }
 
+// updating map every day
 
     public void positionChanged() {
         Platform.runLater(() -> {
@@ -44,6 +45,7 @@ public class CustomMap {
         });
     }
 
+// making new map
 
     private void makeGrid() throws FileNotFoundException {
         grid.setGridLinesVisible(false);
@@ -72,7 +74,6 @@ public class CustomMap {
             grid.getRowConstraints().add(new RowConstraints(size));
             GridPane.setHalignment(label3, HPos.CENTER);
         }
-
 
 
         for (int i = 0; i <= rightUpCorner.x; i++) {

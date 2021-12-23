@@ -22,6 +22,11 @@ public class SideBox {
     XYChart.Series<Number, Number> avgChildrenNo;
     AbstractWorldMap map;
 
+
+// main box which contains map, stats, charts and button
+// one for each map
+// engine and thread are made here in the box
+
     public SideBox(AbstractWorldMap map) throws FileNotFoundException {
 
         topBox = new TopBox(map);
@@ -63,11 +68,13 @@ public class SideBox {
             this.chart.getData().add(avgChildrenNo);
             this.chart.getLegendSide();
         } else {
-            Platform.runLater(() -> animals.getData().add(new XYChart.Data<>(days, map.animalsQuantity)));
-            Platform.runLater(() -> plants.getData().add(new XYChart.Data<>(days, map.plantsQuantity)));
-            Platform.runLater(() -> avgEnergy.getData().add(new XYChart.Data<>(days, map.avgEnergy)));
-            Platform.runLater(() -> avgLifeTime.getData().add(new XYChart.Data<>(days, map.avgLifeTime)));
-            Platform.runLater(() -> avgChildrenNo.getData().add(new XYChart.Data<>(days, map.avgChildrenNo)));
+            Platform.runLater(() -> {
+                animals.getData().add(new XYChart.Data<>(days, map.animalsQuantity));
+                plants.getData().add(new XYChart.Data<>(days, map.plantsQuantity));
+                avgEnergy.getData().add(new XYChart.Data<>(days, map.avgEnergy));
+                avgLifeTime.getData().add(new XYChart.Data<>(days, map.avgLifeTime));
+                avgChildrenNo.getData().add(new XYChart.Data<>(days, map.avgChildrenNo));
+            });
         }
         return chart;
     }

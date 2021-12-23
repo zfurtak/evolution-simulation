@@ -1,7 +1,6 @@
 package agh.ics.oop.gui;
 
 import agh.ics.oop.AbstractWorldMap;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -13,6 +12,9 @@ public class Stats {
     VBox vbox;
     Text chosenGenome;
     Text mostCommonGenome;
+    Text magicOn;
+
+//class containing information about genome and magic mode
 
     public Stats(){
         Label title = new Label("Statystyki");
@@ -23,14 +25,16 @@ public class Stats {
         mostCommonGenome.setWrappingWidth(300);
         chosenGenome = new Text("Click on the animal to show its genome");
         chosenGenome.setWrappingWidth(300);
-        Text stata_3 = new Text("");
+        magicOn = new Text("");
+        magicOn.setWrappingWidth(300);
 
         vbox = new VBox(10);
-        vbox.getChildren().addAll(title, mostCommonGenome, chosenGenome, stata_3);
-
-
+        vbox.getChildren().addAll(title, mostCommonGenome, chosenGenome, magicOn);
     }
 
+    public void updateMagicCounter(int x){
+        magicOn.setText("Magic mode has been initialized "+x+" times so far.");
+    }
 
     public void updateGenome(AbstractWorldMap map){
         mostCommonGenome.setText("Most common genome: " + map.mostCommonGenome.toString());

@@ -21,6 +21,7 @@ public class App extends Application {
         super.init();
     }
 
+//creating stage and scene
 
     @Override
     public void start(Stage stage) {
@@ -31,6 +32,7 @@ public class App extends Application {
         stage.show();
     }
 
+//placing proper box on the screen
 
     public void makeView() {
         Button start = new Button("Press to start");
@@ -51,6 +53,7 @@ public class App extends Application {
         });
     }
 
+//uploading data from parameters menu
 
     public void uploadData(){
         try {
@@ -60,6 +63,8 @@ public class App extends Application {
             AbstractWorldMap map2 = new ExtendedMap(parametersBox.getHeight(), parametersBox.getWidth(),
                     parametersBox.getJungleRation(),parametersBox.getStartEnergy(), parametersBox.getPlantEnergy(),
                     parametersBox.getMoveEnergy());
+            map1.setMagic(parametersBox.getMagicPreference(map1));
+            map2.setMagic(parametersBox.getMagicPreference(map2));
             map1.placeAnimals(parametersBox.getAnimalsQuantity());
             map2.placeAnimals(parametersBox.getAnimalsQuantity());
             leftSide = new SideBox(map1);

@@ -7,6 +7,8 @@ import javafx.scene.layout.VBox;
 
 import java.io.FileNotFoundException;
 
+//class containing map and stats
+
 public class TopBox {
     HBox mainBox;
     public Stats stats;

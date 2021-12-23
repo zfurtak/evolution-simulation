@@ -11,6 +11,7 @@ public class Animal extends AbstractWorldMapElement {
     private int childrenNo = 0;
     public int birthday;
 
+    //constructor for start animals placed on the map
 
     public Animal(AbstractWorldMap map) {
         this.orient = this.orient.startOrient();
@@ -18,8 +19,10 @@ public class Animal extends AbstractWorldMapElement {
         this.energy = map.startEnergy;
         this.genome = new Genome();
         this.birthday = 0;
-        uploadGenomes();
+        updateGenomes();
     }
+
+    //constructor used for baby animals, made in reproduction
 
     public Animal(AbstractWorldMap map, int energyValue, Animal mum, Animal dad, int birthday) {
         this.position = mum.position;
@@ -27,16 +30,21 @@ public class Animal extends AbstractWorldMapElement {
         this.energy = energyValue;
         this.genome = new Genome(mum, dad);
         this.birthday = birthday;
-        uploadGenomes();
+        updateGenomes();
     }
 
-    public void setPosition(Vector2d pos) {
-        this.position = pos;
+    //constructor used for animals-copies made during magic mode
+
+    public Animal(AbstractWorldMap map, int birthday, Animal patternAnimal){
+        this.orient = this.orient.startOrient();
+        this.map = map;
+        this.energy = map.startEnergy;
+        this.genome = patternAnimal.genome;
+        this.birthday = birthday;
+        updateGenomes();
     }
 
-    public boolean isAnimalDead() {
-        return this.energy <= 0;
-    }
+    //moving an animal
 
     public void move() {
         int move = genome.randomGene();
@@ -47,7 +55,6 @@ public class Animal extends AbstractWorldMapElement {
                 newPosition = this.position.add(this.orient.toUnitVector());
                 if (flag && !this.map.canMoveTo(newPosition)) {
                     newPosition = teleport(newPosition);
-
                 }
                 if(this.map.canMoveTo(newPosition)){
                     notify(this.position, newPosition, this);
@@ -73,6 +80,8 @@ public class Animal extends AbstractWorldMapElement {
         }
     }
 
+    //teleporting animals on the map without bounds
+
     public Vector2d teleport(Vector2d newPosition){
         if(newPosition.x > map.rightUpCorner.x) {
             newPosition = newPosition.subtract(new Vector2d(map.width, 0));
@@ -91,6 +100,7 @@ public class Animal extends AbstractWorldMapElement {
         this.energy += (map.plantEnergy / x);
     }
 
+
     public void reproduce(Animal partner) {
         this.energy -= this.energy * 0.25;
         partner.energy -= partner.energy * 0.25;
@@ -102,7 +112,9 @@ public class Animal extends AbstractWorldMapElement {
         this.energy -= map.moveEnergy;
     }
 
-    public void uploadGenomes(){
+    //updating genomes hashmap when animal is created
+
+    public void updateGenomes(){
         if(map.genomes.get(this.genome) == null){
             map.genomes.put(this.genome, 1);
         }else{
@@ -117,6 +129,12 @@ public class Animal extends AbstractWorldMapElement {
             this.orient = this.orient.next();
         }
         notify(this.position, this.position, this);
+    }
+
+    //getters, setters and checks
+
+    public boolean isAnimalDead() {
+        return this.energy <= 0;
     }
 
     public int getEnergy() {
@@ -139,5 +157,9 @@ public class Animal extends AbstractWorldMapElement {
     public Image getImage() {
         double energy = this.energy / (double) map.startEnergy;
         return map.getImageLoader().animalsImages[Math.min(9, Math.max(0, (int) (energy*10)))];
+    }
+
+    public void setPosition(Vector2d pos) {
+        this.position = pos;
     }
 }

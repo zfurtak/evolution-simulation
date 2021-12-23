@@ -1,6 +1,8 @@
 package agh.ics.oop;
 
 
+//map without bounds
+
 public class ExtendedMap extends AbstractWorldMap {
 
     public ExtendedMap(int height, int width, double jungleRatioVal,

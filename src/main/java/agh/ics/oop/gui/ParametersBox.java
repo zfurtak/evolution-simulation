@@ -1,6 +1,8 @@
 package agh.ics.oop.gui;
 
+import agh.ics.oop.AbstractWorldMap;
 import agh.ics.oop.AbstractWorldMapElement;
+import agh.ics.oop.NotExtendedMap;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -14,6 +16,8 @@ import javafx.scene.text.Font;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+// handling text fields for parameters
+
 public class ParametersBox {
     VBox vbox;
     SingleParametersBox height = new SingleParametersBox("Height", "10");
@@ -23,6 +27,8 @@ public class ParametersBox {
     SingleParametersBox plantEnergy = new SingleParametersBox("Amount of energy given by a plant", "10");
     SingleParametersBox moveEnergy = new SingleParametersBox("Amount of energy taken after a move", "1");
     SingleParametersBox jungleRatio = new SingleParametersBox("Part of the map taken by a jungle", "0.2");
+    CheckBox notExtendedMap;
+    CheckBox extendedMap;
 
 
     public ParametersBox() {
@@ -30,14 +36,15 @@ public class ParametersBox {
         title.setFont(new Font("Arial", 24));
         VBox.setMargin(title, new Insets(0, 0, 30, 0));
 
-        CheckBox notExtendedMap = new CheckBox("Magic evolution for map with bounds");
-        CheckBox ExtendedMap = new CheckBox("Magic evolution for map without bounds");
+        notExtendedMap = new CheckBox("Magic evolution for map with bounds");
+        extendedMap = new CheckBox("Magic evolution for map without bounds");
+
 
 
         vbox = new VBox(10);
         vbox.getChildren().addAll(title, height.getSingleBox(), width.getSingleBox(), animalsQuantity.getSingleBox(),
                 startEnergy.getSingleBox(), plantEnergy.getSingleBox(), moveEnergy.getSingleBox(), jungleRatio.getSingleBox(),
-                notExtendedMap, ExtendedMap);
+                notExtendedMap, extendedMap);
         vbox.setAlignment(Pos.CENTER);
     }
 
@@ -73,6 +80,12 @@ public class ParametersBox {
         return Double.parseDouble(jungleRatio.getValue());
     }
 
+    public boolean getMagicPreference(AbstractWorldMap map){
+        if(map instanceof NotExtendedMap)
+            return notExtendedMap.isSelected();
+        else
+            return extendedMap.isSelected();
+    }
 
 }
 

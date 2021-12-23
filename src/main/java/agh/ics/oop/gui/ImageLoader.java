@@ -6,6 +6,8 @@ import javafx.scene.image.ImageView;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+//storing image assigned to an animal
+
 public class ImageLoader {
     public Image[] animalsImages = new Image[10];
     public Image plantImage;

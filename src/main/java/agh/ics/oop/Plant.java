@@ -1,7 +1,6 @@
 package agh.ics.oop;
 
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 public class Plant extends AbstractWorldMapElement{
     AbstractWorldMap map;

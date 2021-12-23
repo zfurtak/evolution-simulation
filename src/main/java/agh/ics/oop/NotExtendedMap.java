@@ -2,6 +2,8 @@ package agh.ics.oop;
 
 public class NotExtendedMap extends AbstractWorldMap{
 
+    //map with bounds
+
     public NotExtendedMap(int height, int width, double jungleRatioVal,
                           int startEnergyVal, int plantEnergyVal, int moveEnergyVal){
 

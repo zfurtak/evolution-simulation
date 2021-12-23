@@ -12,6 +12,8 @@ public class Buttons {
     HBox mainBox;
     Boolean flag;
 
+    // buttons placed under the line chart
+
     public Buttons(AbstractWorldMap map, Thread thread, Boolean flag){
         Button stop = new Button("Stop");
         Button start = new Button("Start");

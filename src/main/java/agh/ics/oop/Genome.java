@@ -7,6 +7,7 @@ public class Genome {
     private final int size = 32;
     private final int genesQuantity = 7;
 
+
     public Genome(){
         this.genomeArray = new int[size];
         randomGenome();
@@ -17,7 +18,7 @@ public class Genome {
         getGenome(mum, dad);
     }
 
-    //getting genome for baby
+    //creating genome for a baby animal
 
     public void getGenome(Animal mum, Animal dad){
         int mumEnergy = mum.getEnergy();
@@ -56,6 +57,7 @@ public class Genome {
         }
     }
 
+    // making random genome
 
     public void randomGenome(){
         for(int i = 0; i < size; i++){
