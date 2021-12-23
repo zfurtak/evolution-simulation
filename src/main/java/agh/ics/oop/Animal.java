@@ -25,6 +25,7 @@ public class Animal extends AbstractWorldMapElement {
     //constructor used for baby animals, made in reproduction
 
     public Animal(AbstractWorldMap map, int energyValue, Animal mum, Animal dad, int birthday) {
+        this.orient = this.orient.startOrient();
         this.position = mum.position;
         this.map = map;
         this.energy = energyValue;
@@ -46,8 +47,12 @@ public class Animal extends AbstractWorldMapElement {
 
     //moving an animal
 
-    public void move() {
-        int move = genome.randomGene();
+    public void move(int x) {
+        int move;
+        if(x == 10)
+            move = genome.randomGene();
+        else
+            move = x;
         Vector2d newPosition;
         boolean flag = this.map instanceof ExtendedMap;
         switch (move) {
@@ -100,7 +105,6 @@ public class Animal extends AbstractWorldMapElement {
         this.energy += (map.plantEnergy / x);
     }
 
-
     public void reproduce(Animal partner) {
         this.energy -= this.energy * 0.25;
         partner.energy -= partner.energy * 0.25;
@@ -124,7 +128,7 @@ public class Animal extends AbstractWorldMapElement {
         }
     }
 
-    private void turn(int x) {
+    public void turn(int x) {
         for (int i = 0; i < x; i++) {
             this.orient = this.orient.next();
         }
@@ -153,6 +157,10 @@ public class Animal extends AbstractWorldMapElement {
         return this.genome;
     }
 
+    public MapDirection getOrient(){
+        return this.orient;
+    }
+
     @Override
     public Image getImage() {
         double energy = this.energy / (double) map.startEnergy;
@@ -161,5 +169,13 @@ public class Animal extends AbstractWorldMapElement {
 
     public void setPosition(Vector2d pos) {
         this.position = pos;
+    }
+
+    public void setEnergy(int value){
+        this.energy = value;
+    }
+
+    public void setOrient(MapDirection direction){
+        this.orient = direction;
     }
 }

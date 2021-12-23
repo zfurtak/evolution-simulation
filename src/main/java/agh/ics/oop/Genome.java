@@ -24,11 +24,13 @@ public class Genome {
         int mumEnergy = mum.getEnergy();
         int dadEnergy = dad.getEnergy();
         int parentsEnergy = mumEnergy + dadEnergy;
-        Random r = new Random();
-        int side = r.nextInt(2); // 0 -> left genome side /\ 1 -> right side
+        int side = (int) (Math.random() * 2); // 0 -> left genome side /\ 1 -> right side
+        System.out.println("side "+side);
         if (mumEnergy >= dadEnergy){
             fillProperSide(mum, dad, mumEnergy, parentsEnergy, side);
         }else{
+
+            System.out.println("tata lepszy");
             fillProperSide(dad, mum, dadEnergy, parentsEnergy, side);
         }
         Arrays.sort(this.genomeArray);
@@ -37,7 +39,7 @@ public class Genome {
     private void fillProperSide(Animal betterParent, Animal worseParent, int betterEnergy, int wholeEnergy, int option){
         switch(option){
             case 0 -> { // filling right side by betterParent
-                int bound =  size*(betterEnergy/wholeEnergy);
+                int bound = (int) (size*((double)betterEnergy/wholeEnergy));
                 for(int i = 0; i < bound; i++){
                     this.genomeArray[i] = betterParent.getGene(i);
                 }
@@ -46,7 +48,7 @@ public class Genome {
                 }
             }
             case 1 -> { // filling left side by betterParent
-                int bound = size * (1 - (betterEnergy/wholeEnergy));
+                int bound = (int)(size * (1 - ((double) betterEnergy / wholeEnergy)));
                 for(int i = 0; i < bound; i++){
                     this.genomeArray[i] = worseParent.getGene(i);
                 }
@@ -71,6 +73,10 @@ public class Genome {
     public int randomGene(){
         int temp = (int) (Math.random() * (size));
         return this.genomeArray[temp];
+    }
+
+    public int[] getGenomeArray(){
+        return this.genomeArray;
     }
 
     public String toString(){

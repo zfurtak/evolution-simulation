@@ -111,7 +111,7 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
 
     public void moveAnimals() {
         for (Animal animal : animalLinkedList){
-                animal.move();
+                animal.move(10);
                 animal.exercise();
         }
     }

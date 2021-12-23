@@ -17,7 +17,7 @@ public class Stats {
 //class containing information about genome and magic mode
 
     public Stats(){
-        Label title = new Label("Statystyki");
+        Label title = new Label("Stats");
         title.setFont(new Font("Arial", 18));
         VBox.setMargin(title, new Insets(10, 0, 10, 0));
 
