@@ -45,7 +45,12 @@ public class App extends Application {
         mainView.setAlignment(Pos.CENTER);
 
         start.setOnAction(value ->  {
-            uploadData();
+            try {
+                uploadData();
+            }catch(IllegalArgumentException e){
+                e.printStackTrace();
+                System.exit(1);
+            }
             mainView.getChildren().clear();
             mainView.getChildren().addAll(leftSide.getSideBox(), rightSide.getSideBox());
             mainView.setAlignment(Pos.CENTER);

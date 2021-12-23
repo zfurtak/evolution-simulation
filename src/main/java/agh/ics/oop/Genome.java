@@ -25,12 +25,9 @@ public class Genome {
         int dadEnergy = dad.getEnergy();
         int parentsEnergy = mumEnergy + dadEnergy;
         int side = (int) (Math.random() * 2); // 0 -> left genome side /\ 1 -> right side
-        System.out.println("side "+side);
         if (mumEnergy >= dadEnergy){
             fillProperSide(mum, dad, mumEnergy, parentsEnergy, side);
         }else{
-
-            System.out.println("tata lepszy");
             fillProperSide(dad, mum, dadEnergy, parentsEnergy, side);
         }
         Arrays.sort(this.genomeArray);

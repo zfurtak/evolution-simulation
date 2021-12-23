@@ -106,7 +106,6 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
         LinkedList<Animal> animalsNewPlace = this.animals.get(newPos);
         animalsOldPlace.remove(animal);
         animalsNewPlace.add(animal);
-
     }
 
     public void moveAnimals() {

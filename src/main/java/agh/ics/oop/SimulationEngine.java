@@ -23,7 +23,7 @@ public class SimulationEngine implements Runnable{
     public void run() {
         while(true){
             try {
-                Thread.sleep(300);
+                Thread.sleep(100);
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
@@ -53,7 +53,7 @@ public class SimulationEngine implements Runnable{
     //turning on magic mode (if checked)
 
     public void magicSystem(){
-        if(map.isMagic && map.animalsQuantity == 5 && magicCounter <= 3){
+        if(map.isMagic && map.animalsQuantity == 5 && magicCounter < 3){
             map.placeMagicAnimals(daysCounter);
             magicCounter ++;
             this.side.topBox.stats.updateMagicCounter(magicCounter);

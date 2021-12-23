@@ -25,6 +25,22 @@ public class SingleParametersBox {
     }
 
     public String getValue(){
-        return textField.getText();
+        String text = textField.getText();
+        if( isNumeric(text) )
+            return text;
+        else
+            throw new IllegalArgumentException();
+    }
+
+    public static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+           double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
     }
 }
