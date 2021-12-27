@@ -26,19 +26,23 @@ public class CustomMap {
         int maxi = Math.max(map.getHeight(), map.getWidth());
         this.size = 300 / maxi;
         this.stats = stats;
-        makeGrid();
+        makeGrid(false);
     }
 
     public VBox getCustomMap(){
         return new VBox(grid);
     }
 
-// updating map every day
+    public void showMostCommonGenomeGuys() throws FileNotFoundException {
+        makeGrid(true);
+    }
+
+    // updating map every day
 
     public void positionChanged() {
         Platform.runLater(() -> {
             try {
-                makeGrid();
+                makeGrid(false);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -47,7 +51,7 @@ public class CustomMap {
 
 // making new map
 
-    private void makeGrid() throws FileNotFoundException {
+    private void makeGrid(boolean flag) throws FileNotFoundException {
         grid.setGridLinesVisible(false);
         grid.getChildren().clear();
         grid.getColumnConstraints().clear();
@@ -83,12 +87,12 @@ public class CustomMap {
 
                 if (map.objectAt(pos) != null && map.getAnimals().get(pos) != null && !map.getAnimals().get(pos).isEmpty()) {
                     map.getAnimals().get(pos).sort(new AbstractWorldMap.EnergyComp());
-                    guiBox = new GuiElementBox(map.getAnimals().get(pos).get(0), this.size, this.stats);
+                    guiBox = new GuiElementBox(map, map.getAnimals().get(pos).get(0), this.size, this.stats, flag);
                     grid.add(guiBox.getBox(), pos.x + 1,
                             rightUpCorner.y - pos.y + 1, 1, 1);
 
                 }else if(map.isPlantThere(pos)){
-                    guiBox = new GuiElementBox(map.getPlant(pos), this.size, this.stats);
+                    guiBox = new GuiElementBox(map, map.getPlant(pos), this.size, this.stats, flag);
                     grid.add(guiBox.getBox(), pos.x + 1,
                             rightUpCorner.y - pos.y + 1, 1, 1);
                 }

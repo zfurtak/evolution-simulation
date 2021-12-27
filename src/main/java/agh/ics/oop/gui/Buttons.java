@@ -1,20 +1,21 @@
 package agh.ics.oop.gui;
 
-import agh.ics.oop.AbstractWorldMap;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+
+import java.io.FileNotFoundException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.lang.System.exit;
 
 public class Buttons {
     HBox mainBox;
-    Boolean flag;
+    private final SideBox side;
 
     // buttons placed under the line chart
 
-    public Buttons(AbstractWorldMap map, Thread thread, Boolean flag){
+    public Buttons(Thread thread, SideBox sideBox){
+        this.side = sideBox;
         Button stop = new Button("Stop");
         Button start = new Button("Start");
         Button save = new Button("Save stats");
@@ -22,13 +23,26 @@ public class Buttons {
         Button exit = new Button("Finish simulation");
         mainBox = new HBox(genome, save, start, stop, exit);
         mainBox.setSpacing(10);
-        this.flag = flag;
 
         exit.setOnAction(event -> exit(0));
-        stop.setOnAction(event -> thread.suspend());
-        start.setOnAction(event -> thread.resume());
+        stop.setOnAction(event -> {
+            thread.suspend();
+            genome.setOnAction(event1 -> {
+                try {
+                    this.side.showMostCommonGenome();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            });
+
+        });
+        start.setOnAction(event -> {
+            thread.resume();
+            genome.setOnAction(null);
+        });
 
     }
+
 
     public HBox getButtons(){
         return mainBox;

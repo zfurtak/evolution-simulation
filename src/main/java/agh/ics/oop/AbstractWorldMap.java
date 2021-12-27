@@ -118,7 +118,7 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
     // eating plants and dividing it to animals with same energy
 
     public void eatDinner() {
-        LinkedList<Vector2d> eatenPlants= new LinkedList<>();
+        LinkedList<Vector2d> eatenPlants = new LinkedList<>();
         for (Vector2d position : plants.keySet()) {
             if (this.isAnimalThere(position)){
                 eatPlant(position);
@@ -208,7 +208,7 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
     public static class EnergyComp implements Comparator<Animal>{
         @Override
         public int compare(Animal a1, Animal a2) {
-            return a1.getEnergy() - a2.getEnergy();
+            return a2.getEnergy() - a1.getEnergy();
         }
     }
 

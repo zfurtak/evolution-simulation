@@ -1,20 +1,14 @@
 package agh.ics.oop.gui;
 
 import agh.ics.oop.AbstractWorldMap;
-import agh.ics.oop.AbstractWorldMapElement;
 import agh.ics.oop.NotExtendedMap;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 // handling text fields for parameters
 

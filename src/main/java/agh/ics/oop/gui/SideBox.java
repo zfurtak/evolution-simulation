@@ -21,31 +21,31 @@ public class SideBox {
     XYChart.Series<Number, Number> avgLifeTime;
     XYChart.Series<Number, Number> avgChildrenNo;
     AbstractWorldMap map;
+    Buttons buttons;
 
-
-// main box which contains map, stats, charts and button
-// one for each map
-// engine and thread are made here in the box
+    // main box which contains map, stats, charts and button
+    // one for each map
+    // engine and thread are made here in the box
 
     public SideBox(AbstractWorldMap map) throws FileNotFoundException {
-
         topBox = new TopBox(map);
         this.map = map;
-
         HBox box = topBox.getTopBox();
         VBox chart = new VBox(getChart(0));
         SimulationEngine engine = new SimulationEngine(map, this);
         Thread thread = new Thread(engine);
-        HBox downBox = new Buttons(map, thread, true).getButtons();
+        this.buttons = new Buttons(thread, this);
+        HBox downBox = buttons.getButtons();
         mainBox = new VBox(box, chart, downBox);
-
         thread.start();
 
     }
 
-    public VBox getSideBox(){
-        return mainBox;
+    public void showMostCommonGenome() throws FileNotFoundException {
+        this.topBox.customMap.showMostCommonGenomeGuys();
     }
+
+    //updating the chart
 
     public LineChart getChart(int days) {
         if (this.chart == null) {
@@ -77,5 +77,9 @@ public class SideBox {
             });
         }
         return chart;
+    }
+
+    public VBox getSideBox(){
+        return mainBox;
     }
 }

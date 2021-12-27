@@ -168,6 +168,7 @@ public class Animal extends AbstractWorldMapElement {
     }
 
     public void setPosition(Vector2d pos) {
+        notify(this.position, pos, this);
         this.position = pos;
     }
 
