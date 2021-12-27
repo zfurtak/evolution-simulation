@@ -21,7 +21,7 @@ public class App extends Application {
         super.init();
     }
 
-//creating stage and scene
+    //creating stage and scene
 
     @Override
     public void start(Stage stage) {
@@ -32,7 +32,7 @@ public class App extends Application {
         stage.show();
     }
 
-//placing proper box on the screen
+    //placing proper box on the screen
 
     public void makeView() {
         Button start = new Button("Press to start");
@@ -58,7 +58,7 @@ public class App extends Application {
         });
     }
 
-//uploading data from parameters menu
+    //uploading data from parameters menu
 
     public void uploadData(){
         try {

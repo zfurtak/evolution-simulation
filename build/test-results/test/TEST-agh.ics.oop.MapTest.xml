@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="agh.ics.oop.MapTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-12-27T14:26:59" hostname="IDEAPAD330" time="0.913">
-  <properties/>
-  <testcase name="mapTest3()" classname="agh.ics.oop.MapTest" time="0.913"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

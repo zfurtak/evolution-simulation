@@ -45,14 +45,16 @@ public class SimulationEngine implements Runnable{
     // generating map, stats and chart every day
 
     public void drawNewMap(){
-        map.avgEnergy = map.getAnimalLinkedList().stream().mapToInt(Animal :: getEnergy).sum() / Math.max(map.animalsQuantity, 1);
+        map.avgEnergy = map.getAnimalLinkedList().stream().mapToInt(Animal :: getEnergy).sum() / Math.max(map.getAnimalsQuantity(), 1);
         map.avgLifeTime = ((map.deadAnimalsNo-map.newDeathsNo) * map.avgLifeTime + map.newLifeTimeData) / Math.max(map.deadAnimalsNo, 1);
-        map.avgChildrenNo = map.getAnimalLinkedList().stream().mapToInt(Animal :: getChildrenNo).sum() / Math.max(map.animalsQuantity, 1);
-        if(map.animalsQuantity != 0)
+        map.avgChildrenNo = map.getAnimalLinkedList().stream().mapToInt(Animal :: getChildrenNo).sum() / Math.max(map.getAnimalsQuantity(), 1);
+        if(map.getAnimalsQuantity() != 0)
             map.mostCommonGenome = Collections.max(map.genomes.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
         averageStats();
+
         String[] data = {Integer.toString(daysCounter), Integer.toString(map.animalsQuantity), Integer.toString(map.plantsQuantity),
                 Integer.toString(map.avgEnergy), Integer.toString(map.avgLifeTime), Integer.toString(map.avgChildrenNo)};
+
         dataLines.add(data);
         this.side.topBox.customMap.positionChanged();
         this.side.topBox.stats.updateGenome(map);
@@ -60,11 +62,11 @@ public class SimulationEngine implements Runnable{
 
     }
 
-    //calculating average statistics
+    //calculating average of all statistics
 
     public void averageStats(){
-        double avgAnimalsQuantity = (average[1] * daysCounter + map.animalsQuantity) / (double) (daysCounter + 1);
-        double avgPlantsQuantity = (average[2] * this.daysCounter + map.plantsQuantity) / (double)(this.daysCounter + 1);
+        double avgAnimalsQuantity = (average[1] * daysCounter + map.getAnimalsQuantity()) / (double) (daysCounter + 1);
+        double avgPlantsQuantity = (average[2] * this.daysCounter + map.getPlantsQuantity()) / (double)(this.daysCounter + 1);
         double avgAvgEnergy = (average[3] * daysCounter + map.avgEnergy) / (double) (daysCounter + 1);
         double avgAvgLifeTime = (average[4] * daysCounter + map.avgLifeTime) / (double) (daysCounter + 1);
         double avgAvgChildNo = (average[5] * daysCounter + map.avgChildrenNo) / (double) (daysCounter + 1);

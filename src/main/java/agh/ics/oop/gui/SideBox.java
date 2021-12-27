@@ -14,15 +14,16 @@ import java.io.FileNotFoundException;
 public class SideBox {
     VBox mainBox;
     public TopBox topBox;
+    AbstractWorldMap map;
+    Buttons buttons;
+    SimulationEngine engine;
     LineChart<Number, Number> chart;
+
     XYChart.Series<Number, Number> animals;
     XYChart.Series<Number, Number> plants;
     XYChart.Series<Number, Number> avgEnergy;
     XYChart.Series<Number, Number> avgLifeTime;
     XYChart.Series<Number, Number> avgChildrenNo;
-    AbstractWorldMap map;
-    Buttons buttons;
-    SimulationEngine engine;
 
     // main box which contains map, stats, charts and button
     // one for each map
@@ -70,8 +71,8 @@ public class SideBox {
             this.chart.getLegendSide();
         } else {
             Platform.runLater(() -> {
-                animals.getData().add(new XYChart.Data<>(days, map.animalsQuantity));
-                plants.getData().add(new XYChart.Data<>(days, map.plantsQuantity));
+                animals.getData().add(new XYChart.Data<>(days, map.getAnimalsQuantity()));
+                plants.getData().add(new XYChart.Data<>(days, map.getPlantsQuantity()));
                 avgEnergy.getData().add(new XYChart.Data<>(days, map.avgEnergy));
                 avgLifeTime.getData().add(new XYChart.Data<>(days, map.avgLifeTime));
                 avgChildrenNo.getData().add(new XYChart.Data<>(days, map.avgChildrenNo));

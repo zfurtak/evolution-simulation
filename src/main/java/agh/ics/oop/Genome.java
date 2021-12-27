@@ -45,7 +45,7 @@ public class Genome {
                 }
             }
             case 1 -> { // filling left side by betterParent
-                int bound = (int)(size * (1 - ((double) betterEnergy / wholeEnergy)));
+                int bound = (int)(size * ((double) (wholeEnergy - betterEnergy) / wholeEnergy));
                 for(int i = 0; i < bound; i++){
                     this.genomeArray[i] = worseParent.getGene(i);
                 }

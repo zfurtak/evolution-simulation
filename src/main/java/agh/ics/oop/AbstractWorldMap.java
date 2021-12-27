@@ -1,11 +1,8 @@
 package agh.ics.oop;
 
 import agh.ics.oop.gui.ImageLoader;
-import javafx.scene.image.ImageView;
-
 import java.util.*;
 
-import static java.lang.System.out;
 
 
 public abstract class AbstractWorldMap implements IPositionChangeObserver {
@@ -25,14 +22,10 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
     protected Vector2d jungleDownCorner;
     protected Vector2d jungleUpCorner;
     protected ImageLoader imageLoader = new ImageLoader();
-    public int animalsQuantity;
-    public int plantsQuantity;
-    public int avgEnergy;
-    public int avgChildrenNo;
-    public int newDeathsNo;
+    protected int animalsQuantity, plantsQuantity;
+    public int avgEnergy, avgChildrenNo, newDeathsNo, newLifeTimeData;
     public int deadAnimalsNo = 0;
     public int avgLifeTime = 1;
-    public int newLifeTimeData;
     public Genome mostCommonGenome;
 
 
@@ -325,6 +318,14 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
 
     public Vector2d findingUpperCorner() {
         return rightUpCorner;
+    }
+
+    public int getAnimalsQuantity(){
+        return animalsQuantity;
+    }
+
+    public int getPlantsQuantity(){
+        return plantsQuantity;
     }
 
 }

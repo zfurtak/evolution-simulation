@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="agh.ics.oop.GenomeTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2021-12-27T20:33:08" hostname="IDEAPAD330" time="0.227">
+  <properties/>
+  <testcase name="genomeTest1()" classname="agh.ics.oop.GenomeTest" time="0.056"/>
+  <testcase name="genomeTest2()" classname="agh.ics.oop.GenomeTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
