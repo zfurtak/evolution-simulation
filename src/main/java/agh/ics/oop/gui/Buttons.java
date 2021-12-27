@@ -4,6 +4,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.lang.System.exit;
@@ -34,12 +35,19 @@ public class Buttons {
                     e.printStackTrace();
                 }
             });
-
+            save.setOnAction(event1 -> {
+                try {
+                    this.side.engine.makeCSVFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         });
         start.setOnAction(event -> {
             thread.resume();
             genome.setOnAction(null);
         });
+
 
     }
 

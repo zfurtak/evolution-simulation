@@ -62,10 +62,10 @@ public class App extends Application {
 
     public void uploadData(){
         try {
-            AbstractWorldMap map1 = new NotExtendedMap(parametersBox.getHeight(), parametersBox.getWidth(),
+            AbstractWorldMap map2 = new NotExtendedMap(parametersBox.getHeight(), parametersBox.getWidth(),
                     parametersBox.getJungleRation(),parametersBox.getStartEnergy(), parametersBox.getPlantEnergy(),
                     parametersBox.getMoveEnergy());
-            AbstractWorldMap map2 = new ExtendedMap(parametersBox.getHeight(), parametersBox.getWidth(),
+            AbstractWorldMap map1 = new ExtendedMap(parametersBox.getHeight(), parametersBox.getWidth(),
                     parametersBox.getJungleRation(),parametersBox.getStartEnergy(), parametersBox.getPlantEnergy(),
                     parametersBox.getMoveEnergy());
             map1.setMagic(parametersBox.getMagicPreference(map1));

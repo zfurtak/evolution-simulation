@@ -22,6 +22,7 @@ public class SideBox {
     XYChart.Series<Number, Number> avgChildrenNo;
     AbstractWorldMap map;
     Buttons buttons;
+    SimulationEngine engine;
 
     // main box which contains map, stats, charts and button
     // one for each map
@@ -32,7 +33,7 @@ public class SideBox {
         this.map = map;
         HBox box = topBox.getTopBox();
         VBox chart = new VBox(getChart(0));
-        SimulationEngine engine = new SimulationEngine(map, this);
+        engine = new SimulationEngine(map, this);
         Thread thread = new Thread(engine);
         this.buttons = new Buttons(thread, this);
         HBox downBox = buttons.getButtons();

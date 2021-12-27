@@ -44,14 +44,14 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
 
         // plant growing in the jungle
 
-        x = (int) (Math.random() * (jungleUpCorner.x-jungleDownCorner.x+1)+jungleDownCorner.x);
-        y = (int) (Math.random() * (jungleUpCorner.y-jungleDownCorner.y+1)+jungleDownCorner.y);
+        x = (int) (Math.random() * (jungleUpCorner.x - jungleDownCorner.x + 1) + jungleDownCorner.x);
+        y = (int) (Math.random() * (jungleUpCorner.y - jungleDownCorner.y + 1) + jungleDownCorner.y);
         plantPosition = new Vector2d(x, y);
         int counter = 0;
         while(isPlantThere(plantPosition) || isAnimalThere(plantPosition)) {
             counter ++;
-            x = (int) (Math.random() * (jungleUpCorner.x-jungleDownCorner.x)+jungleDownCorner.x);
-            y = (int) (Math.random() * (jungleUpCorner.y-jungleDownCorner.y)+jungleDownCorner.y);
+            x = (int) (Math.random() * (jungleUpCorner.x - jungleDownCorner.x) + jungleDownCorner.x);
+            y = (int) (Math.random() * (jungleUpCorner.y - jungleDownCorner.y) + jungleDownCorner.y);
             plantPosition = new Vector2d(x, y);
             if(counter == 11){
                 plantPosition = jungleResearch();
@@ -77,12 +77,16 @@ public abstract class AbstractWorldMap implements IPositionChangeObserver {
             y = (int) (Math.random() * Math.sqrt(10));
             plantPosition = new Vector2d(x, y);
             if(counter == 10){
+                plantPosition = null;
                 break;
             }
         }
-        Plant steppePlant = new Plant(plantPosition, this);
-        plants.put(plantPosition, steppePlant);
-        plantsQuantity++;
+        if(plantPosition != null){
+            Plant steppePlant = new Plant(plantPosition, this);
+            plants.put(plantPosition, steppePlant);
+            plantsQuantity++;
+        }
+
     }
 
 // searching for a place to grow in the jungle
